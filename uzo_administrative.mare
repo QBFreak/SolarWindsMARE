@@ -1,0 +1,18 @@
+@@ Administrative UZO
+@@   UZO for administrative tasks, non-player, non-admin
+
+@set #31=Universal
+
+@addparent #31=ID List Parent
+@@ Only set this once! We really don't want to go overwriting this list once other things have been added to it
+@switch strlen(get(#31,cross_mare_id_list))=0,{@echo [ansi(11,Configuring the ID List for the first time.)];@set #31=cross_mare_id_list:#31~listuzo}
+
+@set #31=color:[colorword(name(me))]
+@set #31=cname:[colorwordcname(name(me))]
+@set #31=desc:This is the UZO for administrative functions and tasks. Back end stuff that doesn't directly affect players. This is not the place to set admin commands, see the Admin UZO for that.
+
+@@ Make sure the Player Logger object is on the list!
+@switch isdbref(cross_mare_ID(plogger))=0,{@echo [ansi(11,Configuring the Player Logger ID for the first time.)];@set #31=cross_mare_id_list:[setunion(cross_mare_id_list(),#11~plogger)]}
+
+@set #31=Aconnect:@tr [cross_mare_ID(plogger)]/logconnect=%#
+@set #31=Adisconnect:@tr [cross_mare_ID(plogger)]/logdisconnect=%#

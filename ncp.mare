@@ -1,0 +1,158 @@
+@@ Navigation Console Parent v1.0
+
+@addparent NCParent=System Function Parent
+
+@set NCParent=Color:12
+
+#mupdate on
+@@set NCParent=Desc:
+	Current sector [get_sector()]%r
+
+--------------[setq(1,foreach(lexits(loc(ship())),[last(first(name(v(0)),>),<)]))]%r
+|      [ifelse(wmatch(v(1),N),N,{ })]  [ifelse(wmatch(v(1),U),U,{ })]   |%r
+|      [ifelse(wmatch(v(1),N),|,{ })] [ifelse(wmatch(v(1),U),/,{ })]    |%r
+| [ifelse(wmatch(v(1),W),W --,{    })] * [ifelse(wmatch(v(1),E),-- E,{    })] |%r
+|    [ifelse(wmatch(v(1),D),/,{ })] [ifelse(wmatch(v(1),S),|,{ })]      |%r
+|   [ifelse(wmatch(v(1),D),D,{ })]  [ifelse(wmatch(v(1),S),S,{ })]      |%r
+--------------
+.
+
+@set NCParent=Desc:
+	Current Sector:		[ansi(y+,get_sector())]%r
+	Current Course:		[ansi(b+,get_course())]%r
+	Course distance:	[ansi(w+,courselen())] sectors%r
+	Helm:			[switch(truth(wmatch(lsema(me),tr_step)),1,ansi(g+,engaged),ansi(x+,idle))]
+.
+#mupdate off
+
+@defattr NCParent/cmd_do=inherit
+
+@defattr NCParent/presentcourse=function
+@defattr NCParent/coursex=function inherit
+@defattr NCParent/coursey=function inherit
+@defattr NCParent/coursez=function inherit
+@defattr NCParent/get_course=function inherit
+@defattr NCParent/clenx=function inherit
+@defattr NCParent/cleny=function inherit
+@defattr NCParent/clenz=function inherit
+@defattr NCParent/courselen=function inherit
+@set NCParent=coursex:[first(presentcourse())]
+@set NCParent=coursey:[extract(presentcourse(),2,1)]
+@set NCParent=coursez:[last(presentcourse())]
+@set NCParent=get_course:[coursex()].[coursey()].[coursez()]
+@set NCParent=clenx:[abs(sub(coursex(),getx()))]
+@set NCParent=cleny:[abs(sub(coursey(),gety()))]
+@set NCParent=clenz:[abs(sub(coursez(),getz()))]
+@set NCParent=courselen:[add(add(clenx(),cleny()),clenz())]
+
+@defattr NCParent/cmd_laycourse=inherit
+@defattr NCParent/cmd_engage=inherit
+@defattr NCParent/cmd_allstop=inherit
+
+@defattr NCParent/cmd_onscreen=inherit
+@defattr NCParent/cmd_offscreen=inherit
+@defattr NCParent/cmd_navon=inherit
+@defattr NCParent/cmd_navoff=inherit
+@defattr NCParent/cmd_shownavs=inherit
+
+@defattr NCParent/tr_step=inherit
+@defattr NCParent/tr_notify=inherit
+@defattr NCParent/tr_shipmove=inherit
+
+#mupdate on
+@set NCParent=cmd_do:$>*:/[not(lor(wmatch(course engage view viewscreen,first(v(0))),match(v(0),all stop)))]/
+	@fo [ship()]={[v(0)]};
+.
+
+@set NCParent=cmd_laycourse:$course *.*.*:
+	@switch [land(land(isnum(v(0)),isnum(v(1))),isnum(v(2)))]=1,{
+		@switch [land(land(between(v(0),-499,499),between(v(1),-499,499)),between(v(2),-499,499))]=1,{
+			@set me=presentcourse:[v(0)] [v(1)] [v(2)];
+			@tr me/tr_notify={New course to \\\[get_course()] laid in},%#;
+			@tr me/tr_notify={Total distance is \\\[courselen()] sectors},%#;
+		},{
+			@tr me/tr_notify={That is not a valid course.},%#;
+		};
+	},{
+		@tr me/tr_notify={That is not a valid course.},%#;
+	};
+.
+
+@set NCParent=cmd_engage:$engage:
+	@switch [land(land(eq(getx(),coursex()),eq(gety(),coursey())),eq(getz(),coursez()))]=1,{
+		@tr me/tr_notify={You are already at [get_sector()]},%#;
+	},{
+		@tr me/tr_notify={Course to [coursex()].[coursey()].[coursez()] engaged},%#;
+		@wait 1/tr_step=@tr me/tr_step;
+	};
+.
+
+@set NCParent=cmd_allstop:$all stop:
+	@cancel [num(me)]=tr_step;
+	@tr me/tr_notify={The ship has stopped},%#;
+.
+
+@set NCParent=cmd_onscreen:$onscreen:
+	@tr [ship()]/tr_addrelay=[num(here)]:0;
+	@tr me/tr_notify={Ship exterior activity will now be shown to the entire bridge}
+.
+
+@set NCParent=cmd_offscreen:$offscreen:
+	@tr [ship()]/tr_delrelay=[num(here)]:0;
+	@tr me/tr_notify={Ship exterior activity will no longer shown on the bridge}
+.
+
+@set NCParent=cmd_navon:$navon:
+	@tr [ship()]/tr_addrelay=[num(v(#))]:0;
+	@tr me/tr_notify={You will now see all ship exterior activity},%#
+.
+
+@set NCParent=cmd_navoff:$navoff:
+	@tr [ship()]/tr_delrelay=[num(v(#))]:0;
+	@tr me/tr_notify={You will no longer see ship exterior activity},%#
+.
+
+@emit [ansi(y+,WARNING: Change this unparse() to a cname()!)];
+.
+
+@set NCParent=cmd_shownavs:$navlist:
+	@tr me/tr_notify={Ship exterior activity is currently being viewed by:},%#;
+	@tr me/tr_notify=[foreach(get(ship(),relay),[unparse(first(v(0),:))])],%#;
+.
+
+@set NCParent=tr_step:
+	@@tr me/tr_notify={Sector [[get_sector()]]};
+	@switch [land(land(eq(getx(),coursex()),eq(gety(),coursey())),eq(getz(),coursez()))]=1,{
+		@tr me/tr_notify={You have arrived at your destination};
+	},{
+		@switch [last(last(sort(s([setunion(clenx(),x,~)] [setunion(cleny(),y,~)] [setunion(clenz(),z,~)]))),~)]=x,{
+			@fo [ship()]=[ifelse(gt(coursex(),getx()),E,W)];
+		},y,{
+			@fo [ship()]=[ifelse(gt(coursey(),gety()),N,S)];
+		},z,{
+			@fo [ship()]=[ifelse(gt(coursez(),getz()),U,D)];
+		};
+		@wait 2/tr_step=@tr me/tr_step;
+	};
+.
+
+@set NCParent=tr_notify:
+	@switch [truth(wcount(v(0)))]=1,{
+		@switch [truth(wcount(v(1)))]=0,{
+			@emit [ansi(s(v(color)),>)] [v(0)];
+		},{
+			@foreach [v(1)]={
+				@pemit v(0)=[ansi(s(v(color)),>)] [v(0)];
+			};
+		};
+	};
+.
+
+@set NCParent=tr_shipmove:
+	@switch [is_a(loc(ship()),cross_mare_id(sectorparent))]=1,{
+		@tr me/tr_notify=[[ansi(c+,get_sector())]];
+	};
+.
+#mupdate off
+
+

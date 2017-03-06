@@ -1,0 +1,5 @@
+@@ Sector Parent v1.0
+
+@set Sector Parent=color:[sectorcolor(createtime(me))]
+@set Sector Parent=cname:[sectorcolor(div(createtime(me),2))]
+@set Sector Parent=caption:sector [sectordisplay(v(#))]

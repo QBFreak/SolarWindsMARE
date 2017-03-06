@@ -1,0 +1,7 @@
+@@ Apartment Exit Parent v1.0
+
+@defattr Apartment Exit Parent/locknotify=function inherit
+
+@set Apartment Exit Parent=Cname:[get(owner(me),cname)]
+@set Apartment Exit Parent=Asucc:@switch [land(land(truth(locknotify()),match(v(#),owner(me))),truth(strlen(v(lock))))]=1,{@pemit %#=Notice: Your door is not unlocked.}
+@set Apartment Exit Parent=Locknotify:1

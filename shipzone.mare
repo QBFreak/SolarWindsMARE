@@ -1,0 +1,25 @@
+@@ Ship Zone Parent v1.0
+
+@defattr Ship Zone Parent/ship=function lock
+@Set Ship Zone Parent=Ship:Ship Parent
+
+@Set Ship Zone Parent=Color:[s(get(ship(),color))]
+@set Ship Zone Parent=Cname:[s(get(ship(),cname))]
+@set Ship Zone Parent=Caption:Ship: [unparse(ship())]
+
+@defattr Ship Zone Parent/get_sector=function inherit
+@set Ship Zone Parent=Get_sector:[switch(match(left(ship(),1),#),0,{?.?.?},s([planetox(plane(ship()))].[planetoy(plane(ship()))].[planetoz(plane(ship()))]))]
+
+@defattr Ship Zone Parent/getx=function inherit
+@defattr Ship Zone Parent/gety=function inherit
+@defattr Ship Zone Parent/getz=function inherit
+
+@set Ship Zone Parent=getx:[if(isdbref(ship()),planetox(plane(ship())))]
+@set Ship Zone Parent=gety:[if(isdbref(ship()),planetoy(plane(ship())))]
+@set Ship Zone Parent=getz:[if(isdbref(ship()),planetoz(plane(ship())))]
+
+@defattr Ship Zone Parent/Colorword=function inherit
+@set Ship Zone Parent=Colorword:[setq(1,v(0))][foreach(lnum(strlen(v(1))),[setq(3,add(v(3),ascii(mid(v(1),v(0),1))))])][mod(v(3),15)]
+
+@set Ship Zone Parent=Aenter:@plane %#=0
+@set Ship Zone Parent=Aleave:@plane %#=[plane(ship())];@tr [ship()]/del_relay=[v(#)]

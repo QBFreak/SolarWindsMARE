@@ -1,0 +1,27 @@
+@@ DRD v1.0
+@@  A wandering bot/puppet
+
+@@set DRD=Wander
+@addparent DRD=Ship Zone Parent
+
+@set DRD=Cname:3,8,3
+@set DRD=Color:3
+@set DRD=Caption:[randword(wheels about the room~looks at you with one eye stalk~sits on the wall watching you~fixes something,~)]
+@set DRD=Desc:This small, oblong, half-dome repair droid has two black eye stalks and an articulated repair tool. It moves around on little wheels and is perfect for getting into nooks and crannies that repair techs can't easily access.
+@set DRD=Rhear:DRD> [v(0)]
+@set DRD=Listen:*
+@set DRD=ship:#28
+
+@@ DRD control commands
+@defattr me/cmd_drd
+@defattr me/cmd_drd_enable
+@defattr me/cmd_drd_disable
+@defattr me/cmd_drd_where
+@defattr me/cmd_drd_wander
+@defattr me/cmd_drd_stop
+@set me=cmd_drd:$drd *:@fo #28=%0
+@set me=cmd_drd_enable:$drdon:@set #28=Puppet
+@set me=cmd_drd_disable:$drdoff:@set #28=!Puppet
+@set me=cmd_drd_where:$drdwhere:@echo [unparse(loc(#28))][switch(hasflag(#28,w),1,: is wandering)]
+@set me=cmd_drd_wander:$drdwander:@set #28=wander
+@set me=cmd_drd_stop:$drdstop:@set #28=!wander

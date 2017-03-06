@@ -1,0 +1,30 @@
+@@ Ship Parent v1.0
+
+@@addparent Ship Parent=System Function Parent
+
+@set Ship Parent=Color:[colorword(name(me))]
+@set Ship Parent=Cname:[colorwordcname(name(me))]
+@set Ship Parent=Desc:[cname(me)] (that's what it says, right there on the side), doesn't look like the fastest or most powerful ship, but at least it appears spaceworthy. Near as we can tell anyway. Who are we to judge? It could be leaking atmo for all we know. Scuttlebut says it's the flagship of [cname(owner(me))]'s fleet, but who are we kidding? [s_as(%S,owner(me),owner(me))] doesn't have a fleet. [s_as(%S,owner(me),owner(me))] has one ship. And what a ship it is.
+@set Ship Parent=Caption:is a ship!
+
+@defattr Ship Parent/airlock=function lock
+@defattr Ship Parent/bridge=function lock
+@defattr Ship Parent/navcon=function lock
+
+@defattr Ship Parent/tr_addrelay=inherit
+@defattr Ship Parent/tr_delrelay=inherit
+
+@set Ship Parent=Lock:#0
+@set Ship Parent=Efail:[switch(strlen(airlock()),0,{You are unable to find a point to enter the ship.},{You enter the ship through the airlock.}]
+@set Ship Parent=Oefail:[switch(strlen(airlock()),0,{looks for a way to enter the ship.},strcat({enters },name(me),{ through the airlock.}))]
+@Set Ship Parent=Aefail:@switch [gt(strlen(airlock()),0)]=1,{@tel %#=[airlock()]:0}
+
+@set Ship Parent=Listen:*
+@set Ship Parent=Rhear:[if(not(lor(wmatch(setunion(name(me),unparse(me),~),v(0),~),wmatch(Triggered. Set. (hidden),strcat({\},last(v(0)))))),s([ansi(c+,>)] [v(0)]))]
+
+@set Ship Parent=Relay:
+
+@set Ship Parent=Amove:@tr [s(v(navcon))]/tr_shipmove
+
+@set Ship Parent=tr_addrelay:@set me=relay:[setunion(v(relay),v(0))]
+@set Ship Parent=tr_delrelay:@set me=relay:[setdiff(v(relay),v(0))]

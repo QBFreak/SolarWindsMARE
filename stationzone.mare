@@ -1,0 +1,9 @@
+@@ Station Zone Parent v1.0
+@@  Zone encompassing an entire single space station
+
+@defattr Station Zone Parent/space=function lock
+@defattr Station Zone Parent/stationid=function lock
+
+@set Station Zone Parent=Caption:[if(lor(not(isdbref(v(space))),not(isdbref(v(stationid)))),ansi(r+,is UNCONFIGURED))]
+@set Station Zone Parent=Color:[s(get(v(stationid),color))]
+@set Station Zone Parent=Cname:[s(get(v(stationid),cname))]

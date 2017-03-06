@@ -1,0 +1,118 @@
+@@ SolarWindsMARE Universal Zone Object v1.0
+@@ - The very best of the commands from the various SluggyMARE UZOs
+@@ = Universal Zone(#2ZU)
+
+@@ Flags @@
+
+@set #2=Universal
+
+
+@@ Attribute Definitions @@
+
+@@ Color commands
+@defattr #2/cmd_colorlist
+@defattr #2/cmd_colorhelp
+
+@@ Com commands
+@@defattr #2/cmd_ocu
+@@defattr #2/cmd_ocu_long
+
+@@defattr #2/cmd_code
+@@defattr #2/cmd_code_long
+
+@@@defattr #2/cmd_pub
+@undefattr #2/cmd_pubmultidir
+@@@defattr #2/cmd_bubblepub
+
+@@ Player information commands
+@defattr #2/cmd_awho
+
+@@ Player interaction commands
+@defattr #2/cmd_think
+@defattr #2/cmd_hug
+@defattr #2/cmd_kiss
+@defattr #2/cmd_lick
+@defattr #2/cmd_poke
+
+@@ Colored player interaction commands
+@defattr #2/cmd_chug
+@defattr #2/cmd_ckiss
+@defattr #2/cmd_click
+@defattr #2/cmd_cpoke
+
+@@ Building commands
+@defattr #2/cmd_pushit
+
+@@ Admin commands
+@defattr #2/cmd_chanlist
+@defattr #2/cmd_chanlistplayer
+
+@@ Player commands
+@defattr #2/cmd_save
+
+@@ Player help commands
+@defattr #2/cmd_quithelp
+
+@@ Attributes @@
+@defattr #2/proc_connect_list=function
+@set #2=Proc_connect_list:[foreach(parents(me),[if(hasattr(v(0),proc_connect),v(0))])]
+
+@@ Build-in actions
+@set #2=Aunidle:@pemit %#=Welcome back! You were idle for [tms(v(0))].
+@set #2=Aconnect:@foreach [proc_connect_list()]={@fo %#=\[get(v(0),proc_connect)];};
+
+@@ Basic object attrs
+@set #2=Color:11
+@set #2=Desc:This UZO is used for MARE-wide player-facing commands
+
+@@ Color commands
+@set #2=cmd_colorlist:$colorlist:@pemit %#=%t - MARE colorlist -%r%r  0 Normal  %t%t   8 [ansi(8,Dark Gray)]%r  1 [ansi(1,Red)]  %t%t   9 [ansi(9,Light Red)]%r  2 [ansi(2,Green)]%t%t  10 [ansi(10,Light Green)]%r  3 [ansi(3,Brown)]%t%t  11 [ansi(11,Yellow)]%r  4 [ansi(4,Blue)] %t%t  12 [ansi(12,Light Blue)]%r  5 [ansi(5,Purple)] %t%t  13 [ansi(13,Light Purple)]%r  6 [ansi(6,Cyan)] %t%t  14 [ansi(14,Light Cyan)]%r  7 [ansi(7,Gray)] %t%t  15 [ansi(15,White)]
+@set #2=cmd_colorhelp:$colorhelp:@pe %#=- MARE colorhelp -%rFull listing of MARE color formating flags%r%rx   - (black)%t%th,+ - %|h|highlight%|0|%rr,1 - %|r|red%|0|%t%tu,- - %|u|underline%|0|%rg,2 - %|g|green%|0|%t%tf,# - %|f|flash%|0|%ry,3 - %|y|yellow%|0|%t%t/ - %|/w|half intensity%|0|%rb,4 - %|b|blue%|0|%t%ti,! - %|i|invert%|0|%rp,5 - %|p|purple%|0|%t%tcapitalize - %|Cwh|set background color%|0|%rc,6 - %|c|cyan%|0|%t%t* - [ansi(hr*,rainbow)] (ansi() or @color only)%rw,7 - %|w|white%|0|%t%t0 - unset colors%r%rcolor:number - set number non-space letters to that color in the pattern for @cname and ctext()%r%rTo do color math with the nummeric values add 8 to obtain higlighted colors and multiply by 16 to obtain background colors. Add the foreground value to the background value to set both.%r%rExamples:%r%|g|%%%%|g| %%%%|2|%|0|%t%|hg|%%%%|hg| %%%%|10|%|0|%t%|Gx|%%%%|Gx| %%%%|32|%|0|%r%|pu|%%%%|pu| %%%%|5u|%|0|%t%|pf|%%%%|pf| %%%%|5f|%|0|%t%|pI|%%%%|pI|%%%%|5I|%|0|%r%|Bhy!/-|%%%%|Bhy!/-|%|0|%t[ctext({[ctext(text,{gh:2,Xyh!:3,rf})]},{gh:2,Xyh:3,rh})]%r[ansi(rh*,{ansi(rh*,text)})]
+
+@@ Player information commands
+@set #2=cmd_awho:$awho:[setq(1,switch(isnum(secure(get(v(#),awho_seconds))),1,secure(get(v(#),awho_seconds)),900))]@fo %#=who =[trim(foreach(s_as(lwho(),v(#),v(#)),{[switch(lt(idle(v(0)),v(1)),1,s({[secure(v(0))]}))]}))]
+
+@@ Building commands
+@set #2=cmd_pushit:$pushit:@force %#={@foreach e se ne s d u n sw nw w=@switch \\\[type(v(0))]=Exit,{@push \\\%0}}
+
+@@ Player interaction commands
+@set #2=cmd_think:$.*:@fo %#=:[ansi(8,.)] [ansi(6,o)] [ansi(14,O)] [ansi(15,{(})] [ansi(randword(11 14 15),v(0))] [ansi(15,{)})]
+@set #2=cmd_hug:$hug *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[land(hasattr(v(1),lhug),not(s(parse_lock(v(#),v(1),get(v(1),lhug)))))],{@oemit %#=[if(hasattr(v(1),ofhug),strcat(name(v(#)),{ },get(v(1),ofhug)))];@pemit %#=[ifelse(hasattr(v(1),fhug),get(v(1),fhug),You can't hug that.)];@trigger [v(1)]/afhug},{@pe %#=\\\[switch(hasattr(v(1),hugged),1,s(get(v(1),hugged)),strcat({You huggle },name(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),ohugged),s(get(v(1),ohugged)),strcat(name(v(#)),{ huggles },name(v(1)),.))];@pe %1=You have been huggled by %N.;@tr %1/ahugged}
+@set #2=cmd_kiss:$kiss *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[land(hasattr(v(1),lkiss),not(s(parse_lock(v(#),v(1),get(v(1),lkiss)))))],{@oemit %#=[if(hasattr(v(1),ofkiss),strcat(name(v(#)),{ },get(v(1),ofkiss)))];@pemit %#=[ifelse(hasattr(v(1),fkiss),get(v(1),fkiss),You can't kiss that.)];@trigger [v(1)]/afkiss},{@pe %#=\\\[switch(hasattr(v(1),kissed),1,s(get(v(1),kissed)),strcat({You kiss },name(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),okissed),s(get(v(1),okissed)),strcat(name(v(#)),{ kisses },name(v(1)),.))];@pe %1=You have been kissed by %N.;@tr %1/akissed}
+@set #2=cmd_lick:$lick *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[truth(setinter(cond(v(#)),wounded dead unconscious asleep ))],{@pemit %#=you are in no condition to lick anything.},[land(hasattr(v(1),llick),not(s(parse_lock(v(#),v(1),get(v(1),llick)))))],{@oemit %#=[if(hasattr(v(1),oflick),strcat(name(v(#)),{ },s_as(get(v(1),oflick),v(#),1)))];@pemit %#=[ifelse(hasattr(v(1),flick),get(v(1),flick),You can't lick that.)];@trigger [v(1)]/aflick},{@pe %#=\\\[switch(hasattr(v(1),licked),1,s_as(get(v(1),licked),v(#),v(1)),strcat({You lick },name(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),olicked),strcat(name(v(#)),{ },s_as(get(v(1),olicked),v(#),v(1))),strcat(name(v(#)),{ licks },name(v(1)),.))];@pe %1=You have been licked by %N.;@tr %1/alicked}
+@set #2=cmd_poke:$poke *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[truth(setinter(cond(v(#)),wounded dead unconscious asleep ))],{@pemit %#=you are in no condition to poke anything.},[land(hasattr(v(1),lpoke),not(s(parse_lock(v(#),v(1),get(v(1),lpoke)))))],{@oemit %#=[if(hasattr(v(1),ofpoke),strcat(name(v(#)),{ },s_as(get(v(1),ofpoke),v(#),v(1))))];@pemit %#=[ifelse(hasattr(v(1),fpoke),get(v(1),fpoke),You can't poke that.)];@trigger [v(1)]/afpoke},{@pe %#=\\\[switch(hasattr(v(1),poked),1,s_as(get(v(1),poked),v(#),v(1)),strcat({You poke },name(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),opoked),strcat(name(v(#)),{ },s_as(get(v(1),opoked),v(#),v(1))),strcat(name(v(#)),{ pokes },name(v(1)),.))];@pe %1=You have been poked by %N.;@tr %1/apoked}
+
+@@ Colored player interaction commands
+@set #2=cmd_chug:$chug *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[land(hasattr(v(1),lhug),not(s(parse_lock(v(#),v(1),get(v(1),lhug)))))],{@oemit %#=[if(hasattr(v(1),ofhug),strcat(cname(v(#)),{ },get(v(1),ofhug)))];@pemit %#=[ifelse(hasattr(v(1),fhug),get(v(1),fhug),You can't hug that.)];@trigger [v(1)]/afhug},{@pe %#=\\\[switch(hasattr(v(1),hugged),1,s(get(v(1),hugged)),strcat({You huggle },cname(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),ohugged),s(get(v(1),ohugged)),strcat(cname(v(#)),{ huggles },cname(v(1)),.))];@pe %1=You have been huggled by [cname(v(#))].;@tr %1/ahugged}
+@set #2=cmd_ckiss:$ckiss *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[land(hasattr(v(1),lkiss),not(s(parse_lock(v(#),v(1),get(v(1),lkiss)))))],{@oemit %#=[if(hasattr(v(1),ofkiss),strcat(cname(v(#)),{ },get(v(1),ofkiss)))];@pemit %#=[ifelse(hasattr(v(1),fkiss),get(v(1),fkiss),You can't kiss that.)];@trigger [v(1)]/afkiss},{@pe %#=\\\[switch(hasattr(v(1),kissed),1,s(get(v(1),kissed)),strcat({You kiss },cname(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),okissed),s(get(v(1),okissed)),strcat(cname(v(#)),{ kisses },cname(v(1)),.))];@pe %1=You have been kissed by [cname(v(#))].;@tr %1/akissed}
+@set #2=cmd_click:$click *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[truth(setinter(cond(v(#)),wounded dead unconscious asleep ))],{@pemit %#=You are in no condition to lick anything.},[land(hasattr(v(1),llick),not(s(parse_lock(v(#),v(1),get(v(1),llick)))))],{@oemit %#=[if(hasattr(v(1),oflick),strcat(cname(v(#)),{ },s_as(get(v(1),oflick),v(#),1)))];@pemit %#=[ifelse(hasattr(v(1),flick),get(v(1),flick),You can't lick that.)];@trigger [v(1)]/aflick},{@pe %#=\\\[switch(hasattr(v(1),licked),1,s_as(get(v(1),licked),v(#),v(1)),strcat({You lick },cname(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),olicked),strcat(cname(v(#)),{ },s_as(get(v(1),olicked),v(#),v(1))),strcat(cname(v(#)),{ licks },cname(v(1)),.))];@pe %1=You have been licked by [cname(v(#))].;@tr %1/alicked}
+@set #2=cmd_cpoke:$cpoke *:[setq(1,s_as([num(v(0))],v(#),v(#)))]@switch 1=[not(nearby(v(#),v(1)))],{@pemit %#=I dont see "\\\[v(0)]" here.},[truth(setinter(cond(v(#)),wounded dead unconscious asleep ))],{@pemit %#=you are in no condition to poke anything.},[land(hasattr(v(1),lpoke),not(s(parse_lock(v(#),v(1),get(v(1),lpoke)))))],{@oemit %#=[if(hasattr(v(1),ofpoke),strcat(cname(v(#)),{ },s_as(get(v(1),ofpoke),v(#),v(1))))];@pemit %#=[ifelse(hasattr(v(1),fpoke),get(v(1),fpoke),You can't poke that.)];@trigger [v(1)]/afpoke},{@pe %#=\\\[switch(hasattr(v(1),poked),1,s_as(get(v(1),poked),v(#),v(1)),strcat({You poke },cname(v(1)),.))];@oemit %#=\\\[ifelse(hasattr(v(1),opoked),strcat(cname(v(#)),{ },s_as(get(v(1),opoked),v(#),v(1))),strcat(cname(v(#)),{ pokes },cname(v(1)),.))];@pe %1=You have been poked by [cname(v(#))].;@tr %1/apoked}
+
+@@ Admin commands
+@set #2=cmd_chanlist:$@chanlist:/[haspow(v(#),who)]/@foreach s([sort(oper(lwho(),,[v(1)] [setdiff(ifelse(match(get(v(0),channel),{#-1 Permission denied.}),,get(v(0),channel)),v(1))]),a)])=@pemit %#=\[v(0)]: \[foreach(cwho(v(0)),\[cname(v(0))])]
+#mupdate on
+@set #2=cmd_chanlistplayer:$@chanlist *:/[haspow(v(#),who)]/
+	@switch [isdbref(pnum(v(0)))]=1,{
+		@switch [match(first(get(pnum(v(0)),channel)),#-1)]=1,{
+			@pemit %#=#-1 Permission denied.;
+		},{
+			@pemit %#=[unparse(pnum(v(0)))]: [edit(get(pnum(v(0)),channel),{ },{, })];
+		};
+	},{
+		@pemit %#=Sorry, [v(0)] is not a valid player.;
+	};
+.
+
+@@ Player Commands;
+@set #2=cmd_save:$save:
+	@switch [lor(match(v(#),owner(loc(v(#)))),hasflag(loc(v(#)),A))]=1,{
+		@link [v(#)]=[loc(v(#))];
+		@pemit %#=[ansi(c+,Save Point:)] [ansi(w+,ifelse(wcount(zone(loc(v(#)))),name(zone(loc(v(#)))),name(loc(v(#)))))];
+	},{
+		@pemit %#=Cannot save..!;
+	};
+.
+#mupdate off
+
+@@ Player help commands
+@set #2=cmd_quithelp:$quit:@pemit %#=If you're trying to disconnect, type QUIT in all caps.

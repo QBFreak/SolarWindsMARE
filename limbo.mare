@@ -1,0 +1,28 @@
+@@ Limbo(#0R)
+@@ Owner: QBFreak
+@@ Type: Room
+@@ Created: Mon Feb 13 11:36:02 2017
+@@ Entrances:
+@@ Limbo <N>(#34E)
+@@ Exits:
+@@ Maintenance <S>(#35E)
+
+@set #0=Desc:You find yourself floating in an empty void of endless black. There is neither light nor sound, no up or down. Absolute nothing.
+@set #0=Color:8
+@set #0=Whoflags:poll name alias idle gender doing
+@set #0=Doing:Gonzo: I had that weird dream again.%rRizzo: You mean the one with the goat and the dwarf and the jar of peanut butter?
+@set #0=Aconnect:who
+
+@@#mupdate on
+@@@set #0=Adesc:
+@@	@wait 2={
+@@		@pemit %#=You feel the sudden urge to sneeze.;
+@@		@wait 2={
+@@			@pemit %#=You begin to wake up...;
+@@			@wait 1={
+@@				@tel %#=#27;
+@@			};
+@@		};
+@@	};
+@@.
+@@#mupdate off

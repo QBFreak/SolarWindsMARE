@@ -1,0 +1,33 @@
+@@ Station Control Console Parent v1.0
+
+@set Station Control Console Parent=Haven
+@set Station Control Console Parent=Color:[colorword(name(me))]
+@set Station Control Console Parent=Cname:[colorwordcname(name(me))]
+@set Station Control Console Parent=Caption:[if(not(isdbref(v(stationid))),ansi(r+,is UNCONFIGURED))]
+@set Station Control Console Parent=Lock:[owner(me)]
+@set Station Control Console Parent=Ulock:[owner(me)]
+@set Station Control Console Parent=Alias:console
+
+@defattr Station Control Console Parent/stationid=function lock
+
+@defattr Station Control Console Parent/get_stationid=function inherit
+@defattr Station Control Console Parent/get_zoneid=function inherit
+@defattr Station Control Console Parent/get_spaceid=function inherit
+@defattr Station Control Console Parent/get_apzones=function inherit
+
+@set Station Control Console Parent=Get_stationid:[v(stationid)]
+@set Station Control Console Parent=Get_zoneid:[get(get_stationid(),zoneid)]
+@set Station Control Console Parent=Get_spaceid:[get(get_zoneid(),space)]
+@set Station Control Console Parent=Get_apzones:[get(v(stationid),apzones)]
+
+#mupdate on
+@set Station Control Console Parent=Desc:[ifelse(isdbref(get_stationid()),s(
+	Control Console for [cname(get_stationid())]%r
+	 * Station: [unparse(get_stationid())]%r
+	 * Space:   [ifelse(isdbref(get_spaceid()),unparse(get_spaceid()),ansi(r+,is UNCONFIGURED))]%r
+	 * Zone:    [ifelse(isdbref(get_zoneid()),unparse(get_zoneid()),ansi(r+,is UNCONFIGURED))][if(truth(strlen(get_apzones())),foreach(get_apzones(),%r
+	 	%t* [unparse(v(0))])
+	 )]
+),s([cname(me)] [ansi(r+,is UNCONFIGURED!)]))]
+.
+#mupdate off

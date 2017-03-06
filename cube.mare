@@ -1,0 +1,9 @@
+@@ The Flying Cube
+@@  QBFreak's Flag Ship (QBFreak's only ship?)
+
+@@addparent The Flying Cube=Ship Parent
+
+@set The Flying Cube=Alias:cube
+@set The Flying Cube=Color:8
+@set The Flying Cube=Cname:8:3,6:6,15:4
+@set The Flying Cube=Desc:[cname(me)] (that's what it says, right there on the side), is not very cube shaped at all. In fact it's a very sleek and speedy looking ship. Scuttlebut says it's the flagship of [cname(owner(me))]'s fleet, but who are we kidding? [s_as(%S,owner(me),owner(me))] doesn't have a fleet. [s_as(%S,owner(me),owner(me))] has one ship. And what a nice ship it is.

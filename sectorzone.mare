@@ -1,0 +1,7 @@
+@@ Sector Zone Parent v1.0
+
+@set Sector Zone Parent=haven
+@addparent Sector Zone Parent=System Function Parent
+
+@defattr Sector Zone Parent/cmd_warp=inherit
+@set Sector Zone Parent=Cmd_warp:$warp *.*.*:/[haspow(owner(v(#)),teleport)]/@tel %#=[loc(v(#))]:[enccoord(v(0),v(1),v(2))]

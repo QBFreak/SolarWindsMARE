@@ -1,0 +1,14 @@
+@@ Station Parent v1.0
+@@  For the station OBJECT. This may or may not end up floating in space, but
+@@   this will contain the details about the station for the various other
+@@   objects/zones/etc that need it.
+
+@set Station Parent=Haven
+@set Station Parent=Color:[colorword(name(me))]
+@set Station Parent=Cname:[colorwordcname(name(me))]
+@set Station Parent=Caption:[if(not(isdbref(v(zoneid))),ansi(r+,is UNCONFIGURED))]
+@set Station Parent=Lock:[owner(me)]
+@set Station Parent=Alias:station
+
+@defattr Station Parent/zoneid=function lock
+@defattr Station Parent/apzones=function lock

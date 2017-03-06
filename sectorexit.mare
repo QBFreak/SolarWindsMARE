@@ -1,0 +1,16 @@
+@@ Sector Exit Parent v1.0
+@@   Parent functions for vlinked exits leading to other sectors withing solar system space
+
+@addparent Sector Exit Parent=System Function Parent
+
+@set Sector Exit Parent=Alias:sector
+
+
+@Set Sector Exit Parent=Color:[s_as(get(room(me),color),room(me),room(me))]
+
+@@ Vlink the exit to it's current location, but change the plane based on the single letter of the exit's alias (e+, w- X, n+ s- Y, u+ d- Z)
+@Set Sector Exit Parent=Vlink:[room(me)]:[setq(0,iftrue(truth(wmatch(v(alias),e,{;})),mul(truth(wmatch(v(alias),w,{;})),-1)))][setq(1,iftrue(truth(wmatch(v(alias),n,{;})),mul(truth(wmatch(v(alias),s,{;})),-1)))][setq(2,iftrue(truth(wmatch(v(alias),u,{;})),mul(truth(wmatch(v(alias),d,{;})),-1)))][enccoord(add(planetox(plane(v(#))),v(0)),add(planetoy(plane(v(#))),v(1)),add(planetoz(plane(v(#))),v(2)))]
+
+@set Sector Exit Parent=Vlock:[switch(first(last(name(me),<),>),n,lt(planetoy(plane(v(#))),499),s,gt(planetoy(plane(v(#))),-499),e,lt(planetox(plane(v(#))),499),w,gt(planetox(plane(v(#))),-499),u,lt(planetoz(plane(v(#))),499),d,gt(planetoz(plane(v(#))),-499),0)]
+@set Sector Exit Parent=Lock:[switch(first(last(name(me),<),>),n,lt(planetoy(plane(v(#))),499),s,gt(planetoy(plane(v(#))),-499),e,lt(planetox(plane(v(#))),499),w,gt(planetox(plane(v(#))),-499),u,lt(planetoz(plane(v(#))),499),d,gt(planetoz(plane(v(#))),-499),0)]
+

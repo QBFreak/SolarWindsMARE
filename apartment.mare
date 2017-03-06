@@ -1,0 +1,77 @@
+@@ Apartment Parent v1.0
+
+@set Apartment Parent=Color:[get(owner(me),color)]
+@set Apartment Parent=Cname:[get(owner(me),cname)]
+@set Apartment Parent=Desc:This is [cname(owner(me))]'s apartment. It's simply constructed and furnished with the basic station apartment package.
+@set Apartment Parent=Ulock:[owner(me)]
+
+@defattr Apartment Parent/lockid=lock
+@defattr Apartment Parent/firsttime=function inherit
+@defattr Apartment Parent/cmd_lock=inherit
+@defattr Apartment Parent/cmd_unlock=inherit
+@defattr Apartment Parent/cmd_silent=inherit
+@defattr Apartment Parent/cmd_warn=inherit
+@defattr Apartment Parent/cmd_reset=inherit
+@defattr Apartment Parent/cmd_help=inherit
+
+@set Apartment Parent=Firsttime:1
+
+#mupdate on
+@set Apartment Parent=Cmd_lock:$lock:
+	@switch [isdbref(v(lockid))]=1,{
+		@lock [v(lockid)]=[owner(me)];
+		@pemit %#=Your door is now locked, only you may enter.;
+	},{
+		@pemit %#=Oh no! There was a problem locking your door. Please notify an admin.;
+	};
+.
+
+@set Apartment Parent=Cmd_unlock:$unlock:
+	@switch [isdbref(v(lockid))]=1,{
+		@lock [v(lockid)]=;
+		@pemit %#=Your door is now unlocked, anyone may enter.;
+	},{
+		@pemit %#=Oh no! There was a problem unlocking your door. Please notify an admin.;
+	};
+.
+
+@set Apartment Parent=Cmd_silent:$silent:
+	@switch [isdbref(v(lockid))]=1,{
+		@set [v(lockid)]=Locknotify:0;
+		@pemit %#=You will no longer receive the lock warning message when you enter your locked apartment.;
+	},{
+		@pemit %#=Oh no! There was a problem accessing your door. Please notify an admin.;
+	};
+.
+
+@set Apartment Parent=Cmd_warn:$warn:
+	@switch [isdbref(v(lockid))]=1,{
+		@set [v(lockid)]=Locknotify:1;
+		@pemit %#=You will now receive the lock warning message when you enter your locked apartment.;
+	},{
+		@pemit %#=Oh no! There was a problem accessing your door. Please notify an admin.;
+	};
+.
+
+@set Apartment Parent=Cmd_reset:$reset:
+	@set me=firsttime:1;
+	@pemit %#=You will see the 'first time' message the next time you enter your apartment.;
+.
+
+@set Apartment Parent=Cmd_help:$apartment help:
+	@pemit %#=[ansi(c+,Your apartment has the following commands:)]%r
+	* [ansi(r+,Lock)]  %tLock your outer door%r
+	* [ansi(g+,Unlock)]%tUnlock your outer door%r
+	* [ansi(x+,Silent)]%tSupress the lock warnings when you enter your apartment%r
+	* [ansi(w+,Warn)]  %tResume the lock warnings when you enter your apartment%r
+	* [ansi(y,Reset)] %tReset the 'first time' message to display the next time you enter your apartment
+	[if(not(isdbref(v(lockid))),ansi(r+,%r   WARNING: Your apartment is not properly configured to use the lock. Please contact an admin.))];
+.
+
+@set Apartment Parent=Aenter:
+	@switch [land(match(v(#),owner(me)),truth(firsttime()))]=1,{
+		@pemit %#=%rThis appears to be your first time in your apartment. Might I suggest typing 'apartment help' ? You type that at any time in your front room. This message will not be displayed again.;
+		@set me=firsttime:0;
+	};
+.
+#mupdate off

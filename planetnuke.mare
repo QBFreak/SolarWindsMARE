@@ -1,0 +1,75 @@
+@@ Planetary Nuke v1.0
+@@  DANGER DANGER This will nuke the contents of a planet from orbit!
+@@  You really don't want to use this thing. Like ever. Seriously.
+
+@echo [ansi(r+,Why are you even creating this thing?)]
+
+@addparent Planetary Nuke=Command Help Parent
+@addparent Planetary Nuke=System Function Parent
+
+@set Planetary Nuke=color:y+
+@set Planetary Nuke=cname:y+,x+
+@set Planetary Nuke=caption:a weapon of the gods
+@set Planetary Nuke=desc:This will @destroy all of the rooms as well as the zone associated with a planet in a specific sector. Are you insane? Put this thing down. Lock it up. Never come near it again.%r[show_commands()]
+@set Planetary Nuke=ulock:[eq(rank(v(#)),5)]
+@set Planetary Nuke=ufail:Thank goodness, you don't have the authority to wield such a weapon.
+
+@defattr Planetary Nuke/roomidattr=function
+@defattr Planetary Nuke/roomid=function
+@set Planetary Nuke=roomidattr:[strcat(roomid_,plane(v(#)))]
+@set Planetary Nuke=roomid:[get(v(0),roomidattr())]
+
+@defattr Planetary Nuke/get_zone=function
+@defattr Planetary Nuke/get_rooms=function
+@set Planetary Nuke=get_zone:[zone(roomid(v(0)))]
+@set Planetary Nuke=get_rooms:[inzone(get_zone(v(0)))]
+
+@defattr Planetary Nuke/help_nuke
+@set Planetary Nuke=help_nuke:@destroy all of the rooms and the zone associated with a planet on this plane.
+
+@defattr Planetary Nuke/cmd_nuke
+@defattr Planetary Nuke/tr_nuke
+@defattr Planetary Nuke/nukeid=lock
+
+#mupdate on
+@set Planetary Nuke=cmd_nuke:$nuke *:
+	@switch [wcount(v(0))]=0,{
+		@pemit %#=Usage: nuke <planet>;
+	},{
+		@switch [isdbref(num(v(0)))]=1,{
+			@switch [truth(wmatch(lattrdef(v(0)),roomidattr()))]=1,{
+				@pemit %#=;
+				@pemit %#=[ansi(y+-,WARNING: You are about to destroy the following:)];
+				@pemit %#=[ansi(w+-,Zone:)] [unparse(get_zone(v(0)))];
+				@pemit %#=[ansi(w+-,Rooms:)] [foreach(get_rooms(v(0)),[unparse(v(0))])];
+				@pemit %#=;
+				@pemit %#=[unparse(owner(roomid(v(0))))] is probably going to be a little unhappy with you.;
+				@pemit %#=;
+				@set me=nukeid:[num(v(0))];
+				@input %#=me/tr_nuke:If you're really sure type YES: ;
+			},{
+				@pemit %#=I can't find a planet defined on '[name(num(v(0)))]' for sector '[sectordisplay(v(#))]'.;
+			};
+		},{
+			@pemit %#=I don't see '[v(0)]' here.;
+		};
+	};
+.
+
+@set Planetary Nuke=tr_nuke:
+	@switch [match(v(0),YES)]=0,{
+		@pemit %#=Everyone breathes a sigh of relief as you take your finger off the trigger. Whew, that was close.;
+	},{
+		@destroy [get_zone(v(nukeid))]=60;
+		@foreach [get_rooms(v(nukeid))]={
+			@destroy \\\[v(0)]=60;
+		};
+		@set me=nukeid:;
+		@undefattr [v(nukeid)]/[roomidattr()];
+		@pemit %#=Boom! It's all gone. Well, going. You gave 60 seconds to undo your mistake. May the gods have mercy on your soul.;
+	};
+.
+#mupdate off
+
+@echo [ansi(r+,You're mad. MAD I SAY!)]
+

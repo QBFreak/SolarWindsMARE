@@ -1,0 +1,22 @@
+@@ Apartment Zone Parent v1.0
+
+@set Apartment Zone Parent=Haven
+@set Apartment Zone Parent=Color:[colorword(name(me))]
+@set Apartment Zone Parent=Cname:[colorwordcname(name(me))]
+@set Apartment Zone Parent=Caption:[ifelse(lor(not(isdbref(v(stationid))),not(isdbref(v(abparent)))),ansi(r+,is UNCONFIGURED),unparse(v(stationid)))]
+
+#mupdate on
+@set Apartment Zone Parent=Desc:[ifelse(isdbref(v(stationid)),s(
+	Apartment Zone Parent for station [cname(v(stationid))]%r
+	 * Station:                [unparse(v(stationid))]%r
+	 * Apartment Bot Parent:   [ifelse(isdbref(v(abparent)),unparse(v(abparent)),ansi(r+,is UNCONFIGURED))]%r
+),s([cname(me)] [ansi(r+,is UNCONFIGURED!)]))]
+.
+#mupdate off
+
+@defattr Apartment Zone Parent/stationid=function lock
+@defattr Apartment Zone Parent/abparent=function lock
+
+@defattr Apartment Zone Parent/zonetype=function inherit
+@set Apartment Zone Parent=zonetype:apartment
+

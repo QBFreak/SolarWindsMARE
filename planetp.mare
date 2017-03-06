@@ -1,0 +1,40 @@
+@@ Planet Parent v1.0
+
+@addparent Planet Parent=Space Object Parent
+@addparent Planet Parent=Enterable Space Object Parent
+@plane Planet Parent=-1
+
+@set Planet Parent=alias:planet
+
+@set Planet Parent=raw_types:1 1 1 2 2 3 3 4 5 5 6 7
+@set Planet Parent=color_list:2 10 3 4 12 8 14
+@set Planet Parent=color:[get_color()]
+@set Planet Parent=cname:[get_color()]
+
+@set Planet Parent=types:alive lush dirt cold~water water rock ice
+
+@set Planet Parent=celestial_type:planet
+
+@defattr Planet Parent/tr_configroom=inherit
+#mupdate on
+@set Planet Parent=tr_configroom:
+	@@ @tr_configroom=#roomid,#playerid ;
+	@switch [land(eq(wcount(v(0)),1),eq(wcount(v(1)),1))]=1,{
+		@name [v(0)]=[rand_lastname()]'s [randword(room_types())];
+		@set [v(0)]=color:[inc(rand(15))];
+		@fo [v(0)]={
+			@open {Space <U>;space;up;u}=Variable;
+			@vlink Space <U>=[loc(me)]:[plane(v(1))];
+		};
+		@tr me/tr_log=[num(me)],[plane(v(1))],{New planet landing room [unparse(v(0))] in zone [unparse(zone(v(0)))] triggered by [unparse(v(1))]};
+		@wait 1=@tel [v(1)]=[v(0)]:0;
+	},{
+		@tr me/tr_log=%#,,{Invalid input to tr_configroom: 0='[v(0)]'  1='[v(1)]'};
+	};
+.
+#mupdate off
+
+@defattr Planet Parent/room_types=inherit function
+@set Planet Parent=room_types:field hills hill peak gorge hollow 
+
+

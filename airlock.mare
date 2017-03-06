@@ -1,0 +1,5 @@
+@@ Airlock Parent v0.1
+@@  Station airlocks
+
+@set Airlock Parent=Color:[get(loc(me),color)]
+@set Airlock Parent=Vlink:[get(zone(loc(me)),space)]:[enccoord(0,0,0)]

@@ -1,0 +1,8 @@
+@@ View Screen
+
+@set View Screen=Transparent
+@set View Screen=Alias:view;v
+@@ Really we should probably foreach() the results from zone() and check is_a() to find the right one
+@@  Eventually I'm going to want ships large enough to warrant multiple zones
+@set View Screen=Vlink:[loc(get(zone(loc(me)),ship))]:[plane(get(zone(loc(me)),ship))]
+@set View Screen=Lock:#0

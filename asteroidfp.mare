@@ -1,0 +1,20 @@
+@@ Asteroid Field Parent v1.0
+
+@addparent Asteroid Field Parent=Space Object Parent
+@addparent Asteroid Field Parent=Enterable Space Object Parent
+
+@set Asteroid Field Parent=alias:asteroid
+
+@set Asteroid Field Parent=raw_types:1 2 3 4
+@set Asteroid Field Parent=color_list:8 8 8 8
+@set Asteroid Field Parent=color:[get_color()]
+
+@set Asteroid Field Parent=types:iron platinum gold rock
+@set Asteroid Field Parent=caption:[if(neq(plane(me),-1),ansi(r+,s(CONFIGURATION ERROR: Please move [unparse(me)] to plane -1)))]
+
+@set Asteroid Field Parent=elock:
+
+@set Asteroid Field Parent=cname:[setq(0,repeat(strcat(get_color(),{,}),strlen(name(me))))][insert(v(0),inc(rand(strlen(name(me)))),switch(ifelse(not(rand(10)),raw_type(),-1),0,{w},1,{w+},2,{y+},3,{x+},get_color()),{,})]
+
+@set Asteroid Field Parent=celestial_type:asteroidfield
+

@@ -1,0 +1,6 @@
+@@ Docking Collar Parent v0.1
+@@  Temporary version of docking collar to allow passage into station
+@@   final version will be visual place holder for arriving ships
+
+@defattr Docking Collar Parent/bay=function lock
+@set Docking Collar Parent=Vlink:[bay()]:0

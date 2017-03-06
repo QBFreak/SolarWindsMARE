@@ -1,0 +1,29 @@
+@@ Claim Maker Parent v1.0
+
+@addparent Claim Maker Parent=Command Help Parent
+
+@set Claim Maker Parent=color:[colorword(name(me))]
+@set Claim Maker Parent=cname:[colorwordcname(name(me))]
+@set Claim Maker Parent=caption:is ready for [ifelse(isdbref(claim_comp()),insta-claims,in-person claims)]
+
+#mupdate on
+@set Claim Maker Parent=The Claim Maker 6000+xeR3-12j is a state of the art asto-spatial and celestial-signature recording and transmission device.
+	It makes use of a quantum connection to instantly transmit your results back to the base station.
+	This ensures that any claim you make is accurately recorded and registered.
+.
+#mupdate off
+
+@defattr Claim Maker Parent/cmd_claim
+@defattr Claim Maker Parent/help_claim
+
+@set Claim Maker Parent=help_claim:registers a claim on a stellar object or a planetary area
+#mupdate on
+@set Claim Maker Parent=cmd_claim:
+	@switch [wcount(v(0))]=0,{
+		@pemit %#=Usage: claim <object>;
+		@pemit %#=Maybe you should try [ansi(y+,claim help)] ?;
+	},{
+		
+	};
+.
+#mupdate off

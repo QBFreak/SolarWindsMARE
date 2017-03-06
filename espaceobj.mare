@@ -1,0 +1,49 @@
+@@ Enterable Space Object Parent
+@@  This parent provides the functionality for enterable space objects like Planets and Asteroids
+
+@addparent Enterable Space Object=Name Database
+
+@set Enterable Space Object Parent=haven
+@set Enterable Space Object Parent=alias:espaceobj
+
+@set Enterable Space Object Parent=caption:[spc(1)]
+
+@set Enterable Space Object Parent=idesc:You head down to the surface.
+
+@defattr Enterable Space Object Parent/roomid=inherit function
+@set Enterable Space Object=roomid:[v(strcat(roomid_,plane(v(#))))]
+
+@defattr Enterable Space Object/tr_digplanet=inherit
+
+#mupdate on
+@set Enterable Space Object Parent=aenter:
+	@switch [isdbref(roomid())]=0,{
+		@switch [celestial_type()]=planet,{
+			@tr me/tr_digplanet=[v(#)];
+		},moon,{
+		},asteroidfield,{
+		},{
+			@tr me/tr_log=[num(me)],[plane(v(#))],{[ansi(r+,ERROR: Unhandled celestial_type [celestial_type()])] by [unparse(v(#))]};
+			@pemit %#=Unfortunately there was an error accessing that celestial body. Pleae contact an admin.;
+			@tel %#=[loc(me)]:[plane(v(#))];
+		};
+	},{
+		@tel %#=[roomid()]:0;
+	};
+.
+
+@set Enterable Space Object=tr_digplanet:@iter * created with room number *.= { @dig dirtside },{
+	@defattr me/roomid_[plane(v(0))];
+	@set me=roomid_[plane(v(0))]:\[v(1)];
+	@set \[v(1)]=floating;
+	@foreach \[zone(v(1))]=@delzone \[v(1)]=\\\[v(0)];
+	@set \[v(1)]=color:;
+	@iter Zone *(*Z) created.={ @zone Planet_[rest(num(me),#)]_[plane(v(0))] },{
+		@addzone \[v(1)]=\\\[v(1)];
+		@tr me/tr_configroom=\[v(1)],%#;
+	};
+}
+.
+#mupdate off
+
+

@@ -1,0 +1,23 @@
+@@ Apartment Bot Parent v1.0
+
+@set Apartment Bot Parent=Haven
+@set Apartment Bot Parent=Color:[colorword(name(me))]
+@set Apartment Bot Parent=Cname:[colorwordcname(name(me))]
+@set Apartment Bot Parent=Caption:[ifelse(lor(not(isdbref(apartzone())),not(isdbref(apartparent()))),ansi(r+,is UNCONFIGURED),is ready to assist)]
+@set Apartment Bot Parent=Lock:[owner(me)]
+
+@defattr Apartment Bot Parent/apartzone=function lock
+@defattr Apartment Bot Parent/apartparent=function lock inherit
+@defattr Apartment Bot Parent/cmd_fixlock=function inherit
+
+#mupdate on
+
+@set Apartment Bot Parent=Desc:The Apartment Bot is the manager and maintainer for [ifelse(isdbref(apartzone()),name(apartzone()),the apartments)].[if(land()isdbref(apartzone()),isdbref(apartparent()),s(%r[ansi(c+,Has the following commands:)]%r
+	* [ansi(b+,fix lock)]%tFix a broken lock on your apartment
+))]
+.
+
+@set Apartment Bot Parent=Cmd_fixlock:$fix lock:
+	
+.
+#mupdate off

@@ -1,0 +1,62 @@
+@@ Space Object Parent v1.0
+@@  Controls what planes an object is visible in,
+@@   thus what sectors contain one of this object.
+
+@addparent Space Object Parent=System Function Parent
+@set Space Object Parent=alias:spaceobj
+
+@@ Take the dbref, turn it into a number from 1-9
+@@  This probably isn't going to get used after all
+@defattr Space Object Parent/adddigits=function inherit
+@set Space Object Parent=adddigits:[setq(1,rest(v(0),#))][foreach(lnum(strlen(v(1))),[setq(2,add(v(2),mid(v(1),v(0),1)))])][ifelse(gt(strlen(v(2)),1),adddigits(v(2)),v(2))]
+
+@@ These two functions exist so that we can override them and duplicate things in a test system
+@defattr Space Object Parent/get_loc=inherit function
+@defattr Space Object Parent/get_plane=inherit function
+@set Space Object Parent=get_loc:[loc(me)]
+@set Space Object Parent=get_plane:[plane(v(#))]
+
+@defattr Space Object Parent/frequency=inherit function
+@set Space Object Parent=frequency:10
+
+@@ Get the random chance for the planet to appear on this plane
+@defattr Space Object Parent/prand=function inherit
+@set Space Object Parent=prand:[srand(iftrue(v(0),frequency()),add(rest(get_loc(),#),div(get_plane(),9999)),mod(get_plane(),9999))]
+
+@set Space Object Parent=lock:#0
+@set Space Object Parent=vlock:[eq(prand(),adddigits(num(me)))]
+
+@defattr Space Object Parent/color_list=function inherit
+@defattr Space Object Parent/get_color=inherit function
+@set Space Object Parent=get_color:[extract(color_list(),get_rtype(),1)]
+
+@defattr Space Object Parent/raw_types=inherit function
+@defattr Space Object Parent/raw_type=inherit function
+@set Space Object Parent=raw_type:[inc(prand(wcount(raw_types())))]
+@defattr Space Object Parent/get_rtype=inherit function
+@set Space Object Parent=get_rtype:[extract(raw_types(),raw_type(),1)]
+
+@defattr Space Object Parent/get_type=inherit function
+@defattr Space Object Parent/types=function inherit
+@set Space Object Parent=get_type:[edit(extract(types(),get_rtype(),1),~,{ })]
+@set Space Object Parent=caption:[ifelse(neq(plane(me),-1),ansi(r+,s(CONFIGURATION ERROR: Please move [unparse(me)] to plane -1)),get_type())]
+
+@defattr Space Object Parent/claim_prefix=inherit function
+@set Space Object Parent=claim_prefix:[loc(me)]
+
+@defattr Space Object Parent/claim_id=inherit function
+@set Space Object Parent=claim_id:[claim_prefix()]:[plane(v(#))].[num(me)]
+
+@defattr Space Object Parent/tr_reqclaimid=inherit
+@set Space Object Parent=tr_reqclaimid:@tr %#/tr_respclaimid=[ifelse(s(v(vlock)),claim_id(),#-1 You cannot claim a hidden object.)]
+
+@defattr Space Object Parent/celestial_type=inherit function
+
+@defattr Space Object Parent/formatplanesector=inherit function
+@set Space Object Parent=formatplanesector:[ansi(c+,{[})][ansi(c,s([planetox(v(0))].[planetoy(v(0))].[planetoz(v(0))]))][ansi(c+,{]})]
+
+@defattr Space Object Parent/log_chan=inherit function
+@defattr Space Object Parent/tr_log=inherit
+@set Space Object Parent=log_chan:_space
+@@ @tr_log=<#source>,[plane],<message>
+@set Space Object Parent=tr_log:@cemit [log_chan()]=[unparse(v(0))] <[unparse(loc(v(0)))][if(wcount(v(1)),formatplanesector(v(1)))]>: [v(2)]

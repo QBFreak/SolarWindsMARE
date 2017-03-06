@@ -1,0 +1,124 @@
+@@ Zone List Parent
+
+@set Zone List Parent=Visible Bearing
+
+@defattr Zone List Parent/zonelist=function
+@defattr Zone List Parent/addcmd=inherit
+@defattr Zone List Parent/delcmd=inherit
+@defattr Zone List Parent/listcmd=inherit
+@defattr Zone List Parent/cleancmd=inherit
+@defattr Zone List Parent/helpcmd=inherit
+@defattr Zone List Parent/roomscmd=inherit
+
+@set Zone List Parent=Ulock:[owner(me)]
+@set Zone List Parent=Lock:[owner(me)]
+
+@set Zone List Parent=Desc:This object holds a list of zones.
+@set Zone List Parent=Caption:contains [wcount(setr(0,zonelist()))] zone[if(not(eq(v(0),1)),s)]
+@set Zone List Parent=Alias:zones
+
+#mupdate on
+@set Zone List Parent=adesc:
+	@foreach zonelist()={
+		@switch hasflag(v(0),zone)=1,{
+			@@ Is a zone;
+			@pemit %#=%t\[unparse(v(0))] \[ansi(get(v(0),color),s(contains \[wcount(inzone(v(0)))] rooms))];
+		},{
+			@@ Is not a zone;
+			@pemit %#=%t%g\[unparse(v(0))] [ansi(9,is not a zone!)];
+		}
+	}
+.
+
+@set Zone List Parent=addcmd:^add:
+	@switch gt(strlen(v(0)),0)=1,{
+		@@ Has v(0);
+		@switch hasflag(v(0),zone)=1,{
+			@@ Is zone;
+			@switch wmatch(zonelist(),v(0))= 0,{
+				@@ Is not in list;
+				@zonelist me=[setunion(zonelist(),v(0))];
+				@pemit %#=[cname(me)]: [unparse(v(0))] [ansi(2,added to the list.)];
+			},{
+				@@ Is in list;
+				@pemit %#=[cname(me)]: [unparse(v(0))] [ansi(1,is already on the list.)];
+			}
+		},{
+			@@ Is not zone;
+			@pemit %#=[cname(me)]: [ifelse(isdbref(v(0)),unparse(v(0)),v(0))] [ansi(1,is not a zone.)];
+		}
+	},{
+		@@ No v(0);
+		@pemit %#=[cname(me)]: [ansi(11,s(Usage: add [iftrue(v(alias),name(me))]=#dbref))];
+	}
+.
+
+@set Zone List Parent=delcmd:^del:
+	@switch gt(strlen(v(0)),0)=1,{
+		@@ Has v(0);
+		@switch wmatch(zonelist(),v(0))= 0,{
+			@@ Is not in list;
+			@pemit %#=[cname(me)]: [unparse(v(0))] [ansi(1,isn't on the list.)];
+		},{
+			@@ Is in list;
+			@zonelist me=[remove(zonelist(),wmatch(zonelist(),v(0)),1)];
+			@pemit %#=[cname(me)]: [unparse(v(0))] [ansi(2,removed from the list.)];
+		}
+	},{
+		@@ No v(0);
+		@pemit %#=[cname(me)]: [unparse(v(0))] [ansi(11,s(Usage: add [iftrue(v(alias),name(me))]=#dbref))];
+	}
+.
+
+@set Zone List Parent=listcmd:^list:
+	@switch gt(strlen(v(0)),0)=1,{
+		@@ Has v(0);
+		@pemit %#=[cname(me)]: [ansi(11,s(Usage: list [iftrue(v(alias),name(me))]))];
+	},{
+		@@ No v(0);
+		@pemit %#=[ansi(v(color),s([name(me)] [v(caption)]))];
+		@tr me/adesc;
+	}
+.
+
+@set Zone List Parent=cleancmd:^clean:
+	@foreach zonelist()={
+		@switch hasflag(v(0),zone)=0,{
+			@@ Is not a zone;
+			@pemit %#=[cname(me)]: [ansi(9,removing non-zone)] \[unparse(v(0))];
+			@zonelist me=\[remove(zonelist(),wmatch(zonelist(),v(0)),1)];
+		}
+	};
+	@fo me=@fo me=@pemit %#=[cname(me)] [ansi(2,clean)];
+.
+
+@set Zone List Parent=helpcmd:^info:
+	@pemit %#=[cname(me)]: This is a simple zone list. You may add or delete entries, or list the zones.
+	%r[cname(me)]: To add an entry: [ansi(11,s({Add [name(me)]=#dbref}))]
+	%r[cname(me)]: To delete an entry: [ansi(11,s({Del [name(me)]=#dbref}))]
+	%r[cname(me)]: To list entries: [ansi(11,s({List [name(me)]}))]
+	%r[cname(me)]: To list rooms in a zone: [ansi(11,s({Rooms [name(me)]=#dbref}))];
+.
+
+@set Zone List Parent=roomscmd:^rooms:
+	@switch gt(strlen(v(0)),0)=1,{
+		@@ Has v(0);
+		@switch hasflag(v(0),Z)=1,{
+			@@ Is a zone;
+			@pemit %#=[unparse(v(0))] contains [wcount(inzone(v(0)))] rooms;
+			@foreach inzone(v(0))={
+				@pemit %#=strcat(%t,unparse(v(0)));
+			}
+		},{
+			@@ Is not a zone;
+			@pemit %#=[ansi(11,v(0))] is not a zone dbref.;
+		}
+	},{
+		@@ No v(0);
+		@pemit %#=[cname(me)]: [ansi(11,s(Usage: rooms [iftrue(v(alias),name(me))]=#dbref))];
+	}
+.
+#mupdate off
+
+
+

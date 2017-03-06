@@ -1,0 +1,14 @@
+@@ Star Parent v1.0
+
+@addparent Star Parent=Space Object Parent
+@set Star Parent=alias:star
+
+@set Star Parent=raw_types:1 1 1 2 2 3 3 4 5 6
+@set Star Parent=color_list:15 11 14 9 8 1
+@set Star Parent=color:[get_color()]
+
+@set Star Parent=types:class~K yellow~giant blue~giant Wolf~Rayet brown~dwarf red~dwarf
+
+@set Star Parent=elock:#0
+
+@set Star Parent=celestial_type:star

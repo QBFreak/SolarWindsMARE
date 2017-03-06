@@ -1,0 +1,18 @@
+@@ Admin UZO
+@@   UZO for Admin commands
+
+@set #10=Universal
+@set #10=Color:6
+@set #10=Caption:is for admin commands
+@set #10=Desc:This UZO contains commands for admins. Care should be taken to lock commands appropriately with haspow() or rank(). It has the following commands defined:[foreach(matchall(lattrdef(me),cmd_*),%r * [extract(lattrdef(me),v(0),1)])]
+
+@set #10=Ulock:[gt(rank(v(#)),3)]
+
+@defattr #10/cmd_announce
+@set #10=Cmd_announce:$@announce *:/[haspow(v(#),broadcast)]/@wemit [ansi(9,Game wide announcement from)] [cname(v(#))]: [v(0)]
+
+
+
+
+
+

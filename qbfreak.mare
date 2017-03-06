@@ -1,0 +1,42 @@
+@addparent me=System Function Parent
+
+@defattr me/cmd_limbo
+@defattr me/cmd_lab
+@defattr me/cmd_loopback
+@defattr me/cmd_parenthome
+@defattr me/cmd_drd
+@defattr me/cmd_drd_enable
+@defattr me/cmd_drd_disable
+@defattr me/cmd_drd_where
+@defattr me/cmd_drd_wander
+@defattr me/cmd_drd_stop
+@defattr me/dotherobot
+@defattr me/cmd_bridge
+@defattr me/set
+@defattr me/cmd_safe
+@set me=Channel:public _ocu bot timestamp
+@set me=Color:2
+@set me=Rlname:Jason Hill
+@set me=Email:qbfreak@qbfreak.net
+@set me=Lastfrom:localhost
+@set me=Whoflags:Name Alias Online Idle G Class Flags Where Doing Hostname Poll Single
+@set me=Cname:8:2,6:2,15:3
+@set me=Desc:A generic looking tech in a work suit. Tools hang from his belt and he is busy typing into a datapad while mumbling to himself.
+@set me=Doing:Building a universe
+@set me=Notify:all
+@set me=Comtitle:[ansi(11,{[+] CSLtd})]
+@set me=cmd_limbo:$limbo:@tel me=#0
+@set me=cmd_lab:$lab:@tel me=#14
+@set me=cmd_loopback:$loopback:@tel me=#23
+@set me=cmd_parenthome:$phome *:@link %0=#16;@tel %0=#16
+@set me=cmd_drd:$drd *:@fo #28=%0
+@set me=cmd_drd_enable:$drdon:@set #28=Puppet
+@set me=cmd_drd_disable:$drdoff:@set #28=!Puppet
+@set me=cmd_drd_where:$drdwhere:@echo [unparse(loc(#28))][switch(hasflag(#28,w),1,: is wandering)]
+@set me=cmd_drd_wander:$drdwander:@set #28=wander
+@set me=cmd_drd_stop:$drdstop:@set #28=!wander
+@set me=dotherobot:+com [v(0)]=:does the robot
+@set me=Alias:qb
+@set me=cmd_bridge:$bridge:@tel #51:0
+@set me=set:@echo [v(0)]-[v(1)]
+@set me=cmd_safe:$safe:@tel me=#16:0

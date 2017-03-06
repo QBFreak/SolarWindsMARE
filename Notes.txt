@@ -1,0 +1,27 @@
+-1		Visible in all planes
++2,147,487,647	Maximum plane
+-2,147,483,648	Minimum plane
+
+0		Center of a solar system, location of the primary star
+
+
+Generation of a new system:
+	Number of stars	0-3	(0 very rare, 1 most common)
+	Color			4, 12, 6
+	Generate jump points to neighboring systems
+		1-4, typically 3
+		In a rough circular pattern around the star, at random points on the circumfrence and randomizing the distance from it for each one
+	Celestial bodies
+		Planets
+		Asteroids (fields)
+		Nebula
+		Black hole (rare)
+	
+
+Other system data:
+	Name	Optionally set
+
+
+Dig system
+Use exit to determine system room number
+@foreach [zone(here)]=@delzone here=\[v(0)]

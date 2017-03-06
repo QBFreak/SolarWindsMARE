@@ -1,0 +1,13 @@
+@@ Claim Zone Parent v1.0
+@@  Zone parent for instant-claim capable systems
+
+@defattr Claim Zone Parent/claim_comp=function lock
+
+@@ Set this just to silence the UNCONFIGURED message on the parent
+@set Claim Zone Parent=claim_comp:#0
+
+@set Claim Zone Parent=color:[colorword(name(me))]
+@set Claim Zone Parent=cname:[colorwordcname(name(me))]
+@set Claim Zone Parent=caption:[ifelse(isdbref(claim_comp()),is ready for claims,ansi(r+,is UNCONFIGURED!))]
+@set Claim Zone Parent=This zone parent provides functionality for instant claims between the Claim Maker and the Claim Computer. [if(not(isdbref(claim_comp())),s([unparse(me)] [ansi(r+,is UNCONFIGURED! Please set @claim_comp)] [cname(me)] [ansi(r+,=)][if(isdbref(num(Claim Computer)),unparse(Claim Computer))]))]
+

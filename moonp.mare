@@ -1,0 +1,21 @@
+@@ Moon Parent v1.0
+
+@addparent Moon Parent=Space Object Parent
+@addparent Moon Parent=Enterable Space Object Parent
+@plane Moon Parent=-1
+
+@set Moon Parent=alias:moon
+
+@defattr Moon Parent/planetid=lock function
+@set Moon Parent=vlock:[land(eq(prand(),adddigits(planetid())),not(prand(3)))]
+@set Moon Parent=caption:[ifelse(neq(plane(me),-1),ansi(r+,s(CONFIGURATION ERROR: Please move [unparse(me)] to plane -1)),ifelse(isdbref(planetid()),get_type(),ansi(r+,s(CONFIGURATION ERROR: Please @set planetid [unparse(me)]=[if(isdbref(num(planet)),unparse(planet))]))))]
+
+@set Moon Parent=raw_types:1 1 2 2 2 2 3 3 4 5
+@set Moon Parent=color_list:7 15 8 3 6
+@set Moon Parent=color:[get_color()]
+@set Moon Parent=cname:[get_color()]
+
+@set Moon Parent=types:
+
+@set Moon Parent=celestial_type:moon
+
