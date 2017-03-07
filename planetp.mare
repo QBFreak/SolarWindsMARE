@@ -1,7 +1,7 @@
 @@ Planet Parent v1.0
 
-@addparent Planet Parent=Space Object Parent
-@addparent Planet Parent=Enterable Space Object Parent
+@addparent2 Planet Parent=Space Object Parent
+@addparent2 Planet Parent=Enterable Space Object Parent
 @plane Planet Parent=-1
 
 @set Planet Parent=alias:planet

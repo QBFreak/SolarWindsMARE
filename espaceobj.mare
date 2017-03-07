@@ -1,7 +1,7 @@
 @@ Enterable Space Object Parent
 @@  This parent provides the functionality for enterable space objects like Planets and Asteroids
 
-@addparent Enterable Space Object=Name Database
+@addparent2 Enterable Space Object=Name Database
 
 @set Enterable Space Object Parent=haven
 @set Enterable Space Object Parent=alias:espaceobj
