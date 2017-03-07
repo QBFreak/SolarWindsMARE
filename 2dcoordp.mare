@@ -1,0 +1,35 @@
+@@ 2D Coordinate System Parent v1.0
+@@  Support functions for a 2D planar room
+@@  
+
+
+@@ Planar coordinate encode/decode system @@
+@@ Magic numbers:
+@@		+2,147,483,647	Maximum plane value
+@@		-2,147,483,648	Minimum plane value
+@@				46,340	Square root (rounded down to decimal) of max plane
+@@				23,169	Above halved, decremented, such that we can use it as an offset and still fall within our root
+@@
+@@ Works with coordinates from -46,340.-46,340 to +46,340.+46,340 for an area of 2,147,395,600 planar rooms per actual room
+
+@defattr 2D Coordinate System Parent/coord_mult=inherit function
+@defattr 2D Coordinate System Parent/coord_offset=inherit function
+@set 2D Coordinate System Parent=coord_mult:46340
+@set 2D Coordinate System Parent=coord_offset:[dec(div(coord_mult(),2))]
+
+@@ Sanity check at upload time
+@switch [lt(mul(get(2D Coordinate System Parent,coord_mult),get(2D Coordinate System Parent,coord_mult)),0)]=1,@echo [ansi(w+,{WARNING: It looks like you've choosen a @coord_mult that causes @plane to roll over to a negative number!})]
+
+@@ Encode a set of x,y,z coordinates to a plane number
+@defattr 2D Coordinate System Parent/enccoord=inherit function
+@set 2D Coordinate System Parent=enccoord:[add(add(range(v(0),neg(coord_offset()),coord_offset()),coord_offset()),mul(add(range(v(1),neg(coord_offset()),coord_offset()),coord_offset()),coord_mult()))]
+
+@@ Decode the x, y or z coordinate from a plane number
+@defattr 2D Coordinate System Parent/planetox=inherit function
+@defattr 2D Coordinate System Parent/planetoy=inherit function
+
+@set 2D Coordinate System Parent=planetoy:[sub(div(v(0),coord_mult()),coord_offset())]
+@set 2D Coordinate System Parent=planetox:[sub(mod(v(0),coord_mult()),coord_offset())]
+
+@defattr 2D Coordinate System Parent/locationdisplay=inherit function
+@set 2D Coordinate System Parent=locationdisplay:[setq(1,ifelse(isdbref(num(v(0))),plane(v(0)),v(0)))][ifelse(isnum(v(1)),strcat(planetox(v(1)),.,planetoy(v(1))),???.???)]
