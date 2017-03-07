@@ -18,22 +18,30 @@
 @set #10=help_addparent2:Works like @addparent, however performs an @search for the parent and adds all matches
 #mupdate on
 @set #10=cmd_addparent2:$@addparent2 *=*:/[haspow(v(#),stats)]/
-	@switch [isdbref(num(v(1)))]=1,{
-		@pemit *qb=@addparent [v(0)]=[v(1)]
+	@switch [isdbref(num(v(0)))]=0,{
+		@pemit %#=I couldn't find '[v(0)]' here.;
 	},{
-		@iter *={
-			@search thing=[v(1)];
+		@switch [isdbref(num(v(1)))]=1,{
+			@@ @force %# so that they get the messages from @addparent. This also enforces any permissions;
+			@fo %#=@addparent [v(0)]=[v(1)];
 		},{
-			@switch \\\[match(v(0),Nothing found.]=1,{
-				@pemit %#= I wasn't able to find a parent named '[v(1)]';
+			@iter *={
+				@search thing=[v(1)];
 			},{
-				@@ Filter out non-object lines;
-				@switch \\\[match(v(0),*(*) *)]=1,{
-					@fo %#=@addparent [v(0)]=\\\[rest(first(v(0),{)}),{(})];
+				@@ Ugh, referencing v(n) in @iter tends to need a LOT of escapes if it was referenced previously (like the @switch at the top);
+				@switch \\\\\\\[match(v(0),Nothing found.]=1,{
+					@pemit %#= I wasn't able to find a parent named '[v(1)]';
+				},{
+					@@ Filter out non-object lines;
+					@switch \\\\\\\[match(v(0),*(*) *)]=1,{
+						@@ @force %# so that they get the messages from @addparent. This also enforces any permissions;
+						@fo %#=@addparent [v(0)]=\\\\\\\[rest(first(v(0),{)}),{(})];
+					};
 				};
-			};
-			@switch \\\[match(v(0),* objects found.)]=1,{
-				@fo me=@pemit %#=\\\[ansi(ifelse(gt(v(0),5),y+,w+),Warning:)] More than one parent has been added!;
+				@switch \\\\\\\[match(v(0),* objects found.)]=1,{
+					@@ Use an @force to delay the @pemit until after the @addparent is done running;
+					@fo me=@pemit %#=\\\\\\\[ansi(ifelse(gt(v(0),5),y+,w+),Warning:)] More than one parent found!;
+				};
 			};
 		};
 	};
