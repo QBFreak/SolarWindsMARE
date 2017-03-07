@@ -17,7 +17,7 @@ Requirements and ideas for various celestial objects, the resources they carry, 
  - [ ] Dust Clouds
 
 ### Possible later additions
-  [ ] Floating hulks?
+ - [ ] Floating hulks?
 
 ## Resources
  - [ ] Water
@@ -29,11 +29,11 @@ Requirements and ideas for various celestial objects, the resources they carry, 
 
 ## Amusing
  - [ ] Space Core
- - [ ] @@ 	Herbie
- - [ ] @@ 	The Winslow
+ - [ ] Herbie
+ - [ ] The Winslow
  - [ ] The TARDIS \(a Police Box specifically)
  - [ ] A Potted Flower
  - [ ] Starfighter cabinet
-
+ 
  - [ ] Abandon Orsintos lab? \(Sluggy Freelance)
  - [ ] Anything from Schlock Mercenary besides the 70 Maxims?
