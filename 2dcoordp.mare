@@ -18,13 +18,13 @@
 @set 2D Coordinate System Parent=coord_offset:[dec(div(coord_mult(),2))]
 
 @@ Sanity check at upload time
-@switch [lt(mul(get(2D Coordinate System Parent,coord_mult),get(2D Coordinate System Parent,coord_mult)),0)]=1,@echo [ansi(w+,{WARNING: It looks like you've choosen a @coord_mult that causes @plane to roll over to a negative number!})]
+@switch [lt(mul(get(2D Coordinate System Parent,coord_mult),get(2D Coordinate System Parent,coord_mult)),0)]=1,@echo [ansi(y+,{WARNING: It looks like you've choosen a @coord_mult that causes @plane to roll over to a negative number!})]
 
-@@ Encode a set of x,y,z coordinates to a plane number
+@@ Encode a set of x,y coordinates to a plane number
 @defattr 2D Coordinate System Parent/enccoord=inherit function
 @set 2D Coordinate System Parent=enccoord:[add(add(range(v(0),neg(coord_offset()),coord_offset()),coord_offset()),mul(add(range(v(1),neg(coord_offset()),coord_offset()),coord_offset()),coord_mult()))]
 
-@@ Decode the x, y or z coordinate from a plane number
+@@ Decode the x or y coordinate from a plane number
 @defattr 2D Coordinate System Parent/planetox=inherit function
 @defattr 2D Coordinate System Parent/planetoy=inherit function
 
