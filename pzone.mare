@@ -1,0 +1,12 @@
+@@ Planet Zone Parent v1.0
+
+@@ Keep the parent from executing anything
+@set Planet Zone Parent=haven
+
+
+@@ Planar room support @@
+
+@addparent2 Planet Zone Parent=Planet Function Parent
+
+@defattr Planet Zone Parent/cmd_warp=inherit
+@set Planet Zone Parent=Cmd_warp:$warp *.*:/[haspow(owner(v(#)),teleport)]/@tel %#=[loc(v(#))]:[enccoord(v(0),v(1))]
