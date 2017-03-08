@@ -12,6 +12,9 @@
 @@
 @@ Works with coordinates from -46,340.-46,340 to +46,340.+46,340 for an area of 2,147,395,600 planar rooms per actual room
 
+@@ Keep the parent from executing anything
+@set 2D Coordinate System Parent=haven
+
 @defattr 2D Coordinate System Parent/coord_mult=inherit function
 @defattr 2D Coordinate System Parent/coord_offset=inherit function
 @set 2D Coordinate System Parent=coord_mult:46340
