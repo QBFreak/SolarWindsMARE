@@ -66,7 +66,7 @@
 		};
 		@set me=nukeid:;
 		@undefattr [v(nukeid)]/[roomidattr()];
-		@pemit %#=Boom! It's all gone. Well, going. You gave 60 seconds to undo your mistake. May the gods have mercy on your soul.;
+		@pemit %#=Boom! It's all gone. Well, going. You have 60 seconds to undo your mistake. May the gods have mercy on your soul.;
 	};
 .
 #mupdate off
