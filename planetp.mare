@@ -2,7 +2,14 @@
 
 @addparent2 Planet Parent=Space Object Parent
 @addparent2 Planet Parent=Enterable Space Object Parent
+@echo [ansi(g+,Ignore the 'More than one parent found' warning. See comments for details.)]
+@@ @addparent2 me=Space Object Parent  will match both Space Object Parent and
+@@  Enterable Space Object Parent. This isn't a concern since we want both anyway.
+
 @plane Planet Parent=-1
+
+@@ Keep the parent from executing anything
+@set Planet Parent=haven
 
 @set Planet Parent=alias:planet
 
@@ -18,18 +25,24 @@
 @defattr Planet Parent/tr_configroom=inherit
 #mupdate on
 @set Planet Parent=tr_configroom:
-	@@ @tr_configroom=#roomid,#playerid ;
-	@switch [land(eq(wcount(v(0)),1),eq(wcount(v(1)),1))]=1,{
-		@name [v(0)]=[rand_lastname()]'s [randword(room_types())];
-		@set [v(0)]=color:[inc(rand(15))];
+	@@ @tr_configroom=#roomid,#zoneid,#playerid ;
+	@switch [land(eq(wcount(v(0)),1),land(eq(wcount(v(1)),1),eq(wcount(v(2)),1)))]=1,{
+		@name [v(0)]=Planet;
+		@name [v(1)]=[setunion(Planet,name(v(1)),_)];
+		@addparent [v(0)]=[cross_mare_id(proomparent)];
+		@addparent [first(zone(v(0)))]=[cross_mare_id(pzoneparent)];
 		@fo [v(0)]={
 			@open {Space <U>;space;up;u}=Variable;
-			@vlink Space <U>=[loc(me)]:[plane(v(1))];
+			@vlink Space <U>=[loc(me)]:[plane(v(2))];
 		};
-		@tr me/tr_log=[num(me)],[plane(v(1))],{New planet landing room [unparse(v(0))] in zone [unparse(zone(v(0)))] triggered by [unparse(v(1))]};
-		@wait 1=@tel [v(1)]=[v(0)]:0;
+		@tr me/tr_log=[num(me)],[plane(v(2))],{New planet landing room [unparse(v(0))] in zone [unparse(first(zone(v(0))))] triggered by [unparse(v(2))]};
+		@@ Plane 1073674629 = Location 0,0. It's ugly to hard code it, but it;
+		@@  seemed like a bad idea to make the Planet Parent a child of the;
+		@@  2D Coordinate System Parent, when it existed in 3D Space. This;
+		@@  really ought to be sorted out some time.;
+		@wait 1=@tel [v(2)]=[v(0)]:1073674629;
 	},{
-		@tr me/tr_log=%#,,{Invalid input to tr_configroom: 0='[v(0)]'  1='[v(1)]'};
+		@tr me/tr_log=%#,,{Invalid input to tr_configroom: 0='[v(0)]'  1='[v(1)]' 2='[v(2)]'};
 	};
 .
 #mupdate off
