@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MudletPackage>
+<MudletPackage version="1.0">
+    <AliasPackage>
+        <AliasGroup isActive="yes" isFolder="yes">
+            <name>mupdate</name>
+            <script></script>
+            <command></command>
+            <packageName></packageName>
+            <regex></regex>
+            <Alias isActive="yes" isFolder="no">
+                <name>Update</name>
+                <script>local filename = mupdate_path .. &quot;\\&quot; .. matches[2] .. &quot;.mare&quot;
+
+local file = io.open(filename, &quot;r&quot;)
+if file then
+	local mupdate = false
+	local buffer = &quot;&quot;
+	for line in file:lines() do
+		if line == &quot;#mupdate on&quot; then
+			mupdate = true
+		else
+			if line == &quot;#mupdate off&quot; then
+				mupdate = false
+			else
+				if mupdate then
+					if line == &quot;.&quot; then
+						send(buffer)
+						buffer = &quot;&quot;
+					else
+						buffer = buffer .. &quot; &quot; .. line
+					end
+				else
+					send(line)
+				end
+			end
+		end
+	end
+	file:close()
+else
+	echo(&quot;Unable to find file &quot; .. filename .. &quot;\n&quot;)
+end
+
+</script>
+                <command></command>
+                <packageName></packageName>
+                <regex>^\/update (.*)$</regex>
+            </Alias>
+        </AliasGroup>
+    </AliasPackage>
+</MudletPackage>
