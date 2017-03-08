@@ -14,6 +14,10 @@
 @set Enterable Space Object=roomid:[v(strcat(roomid_,plane(v(#))))]
 
 @defattr Enterable Space Object/tr_dig=inherit
+@defattr Enterable Space Object/tr_teldown=inherit
+
+@@ Default to plane 0 for @tel to surface
+@set Enterable Space Object=tr_teldown:@tel %#=[roomid()]:0
 
 #mupdate on
 @set Enterable Space Object Parent=aenter:
@@ -26,7 +30,7 @@
 			@tel %#=[loc(me)]:[plane(v(#))];
 		};
 	},{
-		@tel %#=[roomid()]:0;
+		@tr me/tr_teldown=%#;
 	};
 .
 
