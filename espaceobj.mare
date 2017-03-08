@@ -3,25 +3,23 @@
 
 @addparent2 Enterable Space Object=Name Database
 
+@@ Keep the parent from executing anything
 @set Enterable Space Object Parent=haven
+
 @set Enterable Space Object Parent=alias:espaceobj
-
 @set Enterable Space Object Parent=caption:[spc(1)]
-
 @set Enterable Space Object Parent=idesc:You head down to the surface.
 
 @defattr Enterable Space Object Parent/roomid=inherit function
 @set Enterable Space Object=roomid:[v(strcat(roomid_,plane(v(#))))]
 
-@defattr Enterable Space Object/tr_digplanet=inherit
+@defattr Enterable Space Object/tr_dig=inherit
 
 #mupdate on
 @set Enterable Space Object Parent=aenter:
 	@switch [isdbref(roomid())]=0,{
-		@switch [celestial_type()]=planet,{
-			@tr me/tr_digplanet=[v(#)];
-		},moon,{
-		},asteroidfield,{
+		@switch [truth(wmatch(planet moon asteroidfield,celestial_type()))]=1,{
+			@tr me/tr_dig=[v(#)];
 		},{
 			@tr me/tr_log=[num(me)],[plane(v(#))],{[ansi(r+,ERROR: Unhandled celestial_type [celestial_type()])] by [unparse(v(#))]};
 			@pemit %#=Unfortunately there was an error accessing that celestial body. Pleae contact an admin.;
@@ -32,17 +30,20 @@
 	};
 .
 
-@set Enterable Space Object=tr_digplanet:@iter * created with room number *.= { @dig dirtside },{
-	@defattr me/roomid_[plane(v(0))];
-	@set me=roomid_[plane(v(0))]:\[v(1)];
-	@set \[v(1)]=floating;
-	@foreach \[zone(v(1))]=@delzone \[v(1)]=\\\[v(0)];
-	@set \[v(1)]=color:;
-	@iter Zone *(*Z) created.={ @zone Planet_[rest(num(me),#)]_[plane(v(0))] },{
-		@addzone \[v(1)]=\\\[v(1)];
-		@tr me/tr_configroom=\[v(1)],%#;
-	};
-}
+@set Enterable Space Object=tr_dig:
+	@@ @tr_dig=#playerid
+	@@  This is a trigger to keep @iter and v(n) from being a mess;
+	@iter * created with room number *.= { @dig Room },{
+		@defattr me/roomid_[plane(v(0))];
+		@set me=roomid_[plane(v(0))]:\[v(1)];
+		@set \[v(1)]=floating;
+		@foreach \[zone(v(1))]=@delzone \[v(1)]=\\\[v(0)];
+		@set \[v(1)]=color:;
+		@iter Zone *(*Z) created.={ @zone [rest(num(me),#)]_[plane(v(0))] },{
+			@addzone \[v(1)]=\\\[v(1)];
+			@tr me/tr_configroom=\[v(1)],\\\[v(1)],%#;
+		};
+	}
 .
 #mupdate off
 
