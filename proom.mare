@@ -1,0 +1,18 @@
+@@ Planet Room Parent v1.0
+
+@@ Keep the parent from executing anything
+@set Planet Room Parent=haven
+
+
+@@ Planar room support @@
+
+@addparent2 Planet Room Parent=Planet Function Parent
+
+
+@@ Generate room details @@
+
+@set Planet Room Parent=color:[planet_room_color(plane(v(#)))]
+@set Planet Room Parent=cname:[planet_room_color(div(plane(v(#),2))]
+
+@echo [ansi(y+,DEBUG: Remove location display from production!)]
+@set Planet Room Parent=caption:Location [locationdisplay(v(#))]
