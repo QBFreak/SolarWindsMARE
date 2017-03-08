@@ -1,0 +1,20 @@
+@@ 2D Exit Parent v1.0
+@@   Parent functions for vlinked exits in 2D planar rooms
+
+@addparent2 2D Exit Parent=2D Coordinate System Parent
+
+@@ Keep the parent from executing anything
+@set 2D Exit Parent=haven
+
+@set 2D Exit Parent=Alias:2dexit
+
+@@ Get the color from the room the exit is vlink'd to
+@Set 2D Exit Parent=Color:[s_as(get(s(v(vlink)),color),room(me),room(me))]
+
+@@ Vlink the exit to it's current location, but change the plane based on the single letter of the exit's alias (e+, w- X, n+ s- Y, u+ d- Z)
+@Set 2D Exit Parent=Vlink:[room(me)]:[setq(0,iftrue(truth(wmatch(v(alias),e,{;})),mul(truth(wmatch(v(alias),w,{;})),-1)))][setq(1,iftrue(truth(wmatch(v(alias),n,{;})),mul(truth(wmatch(v(alias),s,{;})),-1)))][enccoord(add(planetox(plane(v(#))),v(0)),add(planetoy(plane(v(#))),v(1)))]
+
+@@ @Vlock and @Lock the exits so that we can't go off the edge
+@set 2D Exit Parent=Vlock:[switch(first(last(name(me),<),>),n,lt(planetoy(plane(v(#))),coord_offset()),s,gt(planetoy(plane(v(#))),neg(coord_offset())),e,lt(planetox(plane(v(#))),coord_offset()),w,gt(planetox(plane(v(#))),neg(coord_offset())),0)]
+@set 2D Exit Parent=Lock: [s(v(vlock))]
+
