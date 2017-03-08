@@ -1,0 +1,20 @@
+@@ Planet Function Parent v1.0
+@@  Support functions for a planet (room)
+
+@@ Keep the parent from executing anything
+@set Planet Function Parent=haven
+
+
+@@ Planar room support @@
+
+@addparent2 Planet Function Parent=2D Coordinate System Parent
+
+
+@@ Plane-based color functions @@
+
+@defattr Planet Function Parent/planet_room_color=inherit function
+@defattr Planet Function Parent/planet_room_colors=inherit function
+
+@@ a 4/5 chance of using one of the first four colors, otherwise use any color
+@set Planet Function Parent=planet_room_color:[ifelse(mod(v(0),5),extract(planet_room_colors(),inc(mod(v(0),4)),1),extract(planet_room_colors(),inc(mod(v(0),wcount(planet_room_colors()))),1))]
+@set Planet Function Parent=planet_room_colors:2 3 10 12 1 5 6 7 8 9 11 13 14 15
