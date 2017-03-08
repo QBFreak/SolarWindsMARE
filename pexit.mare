@@ -1,0 +1,8 @@
+@@ Planet Exit Parent v1.0
+@@   Parent functions for planet exits, beyond those provided by
+@@	  2D Exit Parent
+
+@@ Keep the parent from executing anything
+@set Planet Exit Parent=haven
+
+@@ Nothing here yet!
