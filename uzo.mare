@@ -13,17 +13,6 @@
 @defattr #2/cmd_colorlist
 @defattr #2/cmd_colorhelp
 
-@@ Com commands
-@@defattr #2/cmd_ocu
-@@defattr #2/cmd_ocu_long
-
-@@defattr #2/cmd_code
-@@defattr #2/cmd_code_long
-
-@@@defattr #2/cmd_pub
-@undefattr #2/cmd_pubmultidir
-@@@defattr #2/cmd_bubblepub
-
 @@ Player information commands
 @defattr #2/cmd_awho
 
@@ -73,7 +62,11 @@
 @set #2=cmd_awho:$awho:[setq(1,switch(isnum(secure(get(v(#),awho_seconds))),1,secure(get(v(#),awho_seconds)),900))]@fo %#=who =[trim(foreach(s_as(lwho(),v(#),v(#)),{[switch(lt(idle(v(0)),v(1)),1,s({[secure(v(0))]}))]}))]
 
 @@ Building commands
-@set #2=cmd_pushit:$pushit:@force %#={@foreach e se ne s d u n sw nw w=@switch \\\[type(v(0))]=Exit,{@push \\\%0}}
+
+@@	The @force is needed for the 'look', even through it's already inside the
+@@	 other @force, to delay the look's entry into the queue until after the
+@@	 contents of the @foreach
+@set #2=cmd_pushit:$pushit:@force %#={@foreach e se ne s d u n sw nw w={@switch \\\[type(v(0))]=Exit,{@push \\\%0}}; @fo me=look}
 
 @@ Player interaction commands
 @set #2=cmd_think:$.*:@fo %#=:[ansi(8,.)] [ansi(6,o)] [ansi(14,O)] [ansi(15,{(})] [ansi(randword(11 14 15),v(0))] [ansi(15,{)})]
