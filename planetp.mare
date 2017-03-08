@@ -22,6 +22,12 @@
 
 @set Planet Parent=celestial_type:planet
 
+@@ Plane 1073674629 = Location 0,0. It's ugly to hard code it, but it;
+@@  seemed like a bad idea to make the Planet Parent a child of the;
+@@  2D Coordinate System Parent, when it existed in 3D Space. This;
+@@  really ought to be sorted out some time.;
+@set Planet Parent=tr_teldown:@tel %#=[roomid()]:1073674629
+
 @defattr Planet Parent/tr_configroom=inherit
 #mupdate on
 @set Planet Parent=tr_configroom:
