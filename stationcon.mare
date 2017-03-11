@@ -22,12 +22,12 @@
 
 #mupdate on
 @set Station Control Console Parent=Desc:[ifelse(isdbref(get_stationid()),s(
-	Control Console for [cname(get_stationid())]%r
-	 * Station: [unparse(get_stationid())]%r
-	 * Space:   [ifelse(isdbref(get_spaceid()),unparse(get_spaceid()),ansi(r+,is UNCONFIGURED))]%r
-	 * Zone:    [ifelse(isdbref(get_zoneid()),unparse(get_zoneid()),ansi(r+,is UNCONFIGURED))][if(truth(strlen(get_apzones())),foreach(get_apzones(),%r
-	 	%t* [unparse(v(0))])
-	 )]
+    Control Console for [cname(get_stationid())]%r
+     * Station: [unparse(get_stationid())]%r
+     * Space:   [ifelse(isdbref(get_spaceid()),unparse(get_spaceid()),ansi(r+,is UNCONFIGURED))]%r
+     * Zone:    [ifelse(isdbref(get_zoneid()),unparse(get_zoneid()),ansi(r+,is UNCONFIGURED))][if(truth(strlen(get_apzones())),foreach(get_apzones(),%r
+     [spc(2)] * [unparse(v(0))])
+     )]
 ),s([cname(me)] [ansi(r+,is UNCONFIGURED!)]))]
 .
 #mupdate off
