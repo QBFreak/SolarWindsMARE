@@ -60,11 +60,11 @@
 
 @set Apartment Parent=Cmd_help:$apartment help:
 	@pemit %#=[ansi(c+,Your apartment has the following commands:)]%r
-	* [ansi(r+,Lock)]  %tLock your outer door%r
-	* [ansi(g+,Unlock)]%tUnlock your outer door%r
-	* [ansi(x+,Silent)]%tSupress the lock warnings when you enter your apartment%r
-	* [ansi(w+,Warn)]  %tResume the lock warnings when you enter your apartment%r
-	* [ansi(y,Reset)] %tReset the 'first time' message to display the next time you enter your apartment
+	* [ansi(r+,ljust(Lock,10))] Lock your outer door%r
+	* [ansi(g+,ljust(Unlock,10))] Unlock your outer door%r
+	* [ansi(x+,ljust(Silent,10))] Supress the lock warnings when you enter your apartment%r
+	* [ansi(w+,ljust(Warn,10))] Resume the lock warnings when you enter your apartment%r
+	* [ansi(y,ljust(Reset,10))] Reset the 'first time' message to display the next time you enter your apartment
 	[if(not(isdbref(v(lockid))),ansi(r+,%r   WARNING: Your apartment is not properly configured to use the lock. Please contact an admin.))];
 .
 
