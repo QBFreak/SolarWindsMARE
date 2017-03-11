@@ -22,10 +22,10 @@
 	@foreach zonelist()={
 		@switch hasflag(v(0),zone)=1,{
 			@@ Is a zone;
-			@pemit %#=%t\[unparse(v(0))] \[ansi(get(v(0),color),s(contains \[wcount(inzone(v(0)))] rooms))];
+			@pemit %#=[spc(8)]\[unparse(v(0))] \[ansi(get(v(0),color),s(contains \[wcount(inzone(v(0)))] rooms))];
 		},{
 			@@ Is not a zone;
-			@pemit %#=%t%g\[unparse(v(0))] [ansi(9,is not a zone!)];
+			@pemit %#=[spc(8)]%g\[unparse(v(0))] [ansi(9,is not a zone!)];
 		}
 	}
 .
@@ -107,7 +107,7 @@
 			@@ Is a zone;
 			@pemit %#=[unparse(v(0))] contains [wcount(inzone(v(0)))] rooms;
 			@foreach inzone(v(0))={
-				@pemit %#=strcat(%t,unparse(v(0)));
+				@pemit %#=strcat(spc(8),unparse(v(0)));
 			}
 		},{
 			@@ Is not a zone;
