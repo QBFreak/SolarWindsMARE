@@ -12,12 +12,12 @@
 
 #mupdate on
 
-@set Apartment Bot Parent=Desc:The Apartment Bot is the manager and maintainer for [ifelse(isdbref(apartzone()),name(apartzone()),the apartments)].[if(land()isdbref(apartzone()),isdbref(apartparent()),s(%r[ansi(c+,Has the following commands:)]%r
-	* [ansi(b+,fix lock)]%tFix a broken lock on your apartment
+@set Apartment Bot Parent=Desc:The Apartment Bot is the manager and maintainer for [ifelse(isdbref(apartzone()),name(apartzone()),the apartments)].[if(land(isdbref(apartzone()),isdbref(apartparent())),s(%r[ansi(c+,Has the following commands:)]%r
+	* [ansi(b+,ljust(fix lock,10))] Fix a broken lock on your apartment
 ))]
 .
 
 @set Apartment Bot Parent=Cmd_fixlock:$fix lock:
-	
+	@@ STUB;
 .
 #mupdate off
