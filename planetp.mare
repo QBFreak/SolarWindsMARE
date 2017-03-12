@@ -38,8 +38,17 @@
 		@addparent [v(0)]=[cross_mare_id(proomparent)];
 		@addparent [first(zone(v(0)))]=[cross_mare_id(pzoneparent)];
 		@fo [v(0)]={
+			@open {East <E>;east;e}=Variable;
+			@addparent East <E>=[cross_mare_id(2dexitparent)];
+			@open {South <S>;south;s}=Variable;
+			@addparent South <S>=[cross_mare_id(2dexitparent)];
 			@open {Space <U>;space;up;u}=Variable;
 			@vlink Space <U>=[loc(me)]:[plane(v(2))];
+			@plane Space <U>=1073674629;
+			@open {North <N>;north;n}=Variable;
+			@addparent North <N>=[cross_mare_id(2dexitparent)];
+			@open {West <W>;west;w}=Variable;
+			@addparent West <W>	=[cross_mare_id(2dexitparent)];
 		};
 		@tr me/tr_log=[num(me)],[plane(v(2))],{New planet landing room [unparse(v(0))] in zone [unparse(first(zone(v(0))))] triggered by [unparse(v(2))]};
 		@@ Plane 1073674629 = Location 0,0. It's ugly to hard code it, but it;
@@ -57,3 +66,8 @@
 @set Planet Parent=room_types:field hills hill peak gorge hollow 
 
 
+@@ Auto config check @@ 
+
+@switch isdbref(cross_mare_id(proomparent))=0,@echo [ansi(r+,ERROR: The Planet Room Parent is not on the Cross-MARE ID list!)]
+@switch isdbref(cross_mare_id(pzoneparent))=0,@echo [ansi(r+,ERROR: The Planet Zone Parent is not on the Cross-MARE ID list!)]
+@switch isdbref(cross_mare_id(2dexitparent))=0,@echo [ansi(r+,ERROR: The 2D Exit Parent is not on the Cross-MARE ID list!)]
