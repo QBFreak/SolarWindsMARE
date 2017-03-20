@@ -1,0 +1,17 @@
+@@ 3D Coordinate System Parent v1.0
+
+@@ Planar coordinate encode/decode system @@
+@@ Works with coordinates from -499,-499,-499 to +499,+499,+499 for a volume of approx 1 billion sectors (rooms) per room
+
+@@ Encode a set of x,y,z coordinates to a plane number
+@defattr 3D Coordinate System Parent/enccoord=inherit function
+@set 3D Coordinate System Parent=enccoord:[add(add(mul(add(range(v(2),-499,499),499),1000000),mul(add(range(v(1),-499,499),499),1000)),add(range(v(0),-499,499),499))]
+
+@@ Decode the x, y or z coordinate from a plane number
+@defattr 3D Coordinate System Parent/planetox=inherit function
+@defattr 3D Coordinate System Parent/planetoy=inherit function
+@defattr 3D Coordinate System Parent/planetoz=inherit function
+
+@set 3D Coordinate System Parent=planetoz:[range(sub(div(v(0),1000000),499),-499,499)]
+@set 3D Coordinate System Parent=planetoy:[range(sub(div(mod(v(0),1000000),1000),499),-499,499)]
+@set 3D Coordinate System Parent=planetox:[range(sub(mod(mod(v(0),1000000),1000),499),-499,499)]

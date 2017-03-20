@@ -1,5 +1,16 @@
 @@ Sector Parent v1.0
 
+@addparent2 Sector Parent=3D Coordinate System Parent
+
 @set Sector Parent=color:[sectorcolor(createtime(me))]
 @set Sector Parent=cname:[sectorcolor(div(createtime(me),2))]
 @set Sector Parent=caption:sector [sectordisplay(v(#))]
+
+@defattr Sector Parent/sectordisplay=inherit function
+@set Sector Parent=sectordisplay:[planetox(plane(v(0)))].[planetoy(plane(v(0)))].[planetoz(plane(v(0)))]
+
+@defattr Sector Parent/sectorcolors=inherit function
+@set Sector Parent=sectorcolors:4 12 14 1 2 3 5 6 7 15
+
+@defattr Sector Parent/sectorcolor=inherit function
+@set Sector Parent=sectorcolor:[ifelse(mod(v(0),5),extract(sectorcolors(),inc(mod(v(0),3)),1),extract(sectorcolors(),inc(mod(v(0),wcount(sectorcolors()))),1))]
