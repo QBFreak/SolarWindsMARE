@@ -15,3 +15,9 @@
 @set 3D Coordinate System Parent=planetoz:[range(sub(div(v(0),1000000),499),-499,499)]
 @set 3D Coordinate System Parent=planetoy:[range(sub(div(mod(v(0),1000000),1000),499),-499,499)]
 @set 3D Coordinate System Parent=planetox:[range(sub(mod(mod(v(0),1000000),1000),499),-499,499)]
+
+@defattr 3D Coordinate System Parent/distance=inherit function
+@set 3D Coordinate System Parent=distance:[ifelse(land(isnum(v(0)),land(isnum(v(1)),land(isnum(v(2)),land(isnum(v(3)),land(isnum(v(4)),isnum(v(5))))))),sqrt(add(abs(sub(v(0),v(3))),add(abs(sub(v(1),v(4))),abs(sub(v(2),v(5)))))),#-1)]
+
+@defattr 3D Coordinate System Parent/comdelay=inherit function
+@set 3D Coordinate System Parent=comdelay:[ifelse(land(isnum(v(0)),land(isnum(v(1)),isnum(v(2)))),mul(ceil(distance(planetox(plane(v(#))),planetoy(plane(v(#))),planetoz(plane(v(#))),v(0),v(1),v(2))),2),#-1)]
