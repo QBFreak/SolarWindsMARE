@@ -7,12 +7,14 @@
 @@ Planar room support @@
 
 @addparent2 Planet Room Parent=Planet Function Parent
-
+@addparent2 Planet Room Parent=2D Terrain Parent
 
 @@ Generate room details @@
 
-@set Planet Room Parent=color:[planet_room_color(plane(v(#)))]
-@set Planet Room Parent=cname:[planet_room_color(div(plane(v(#),2))]
+@set Planet Room Parent=terrain_min:1
+@set Planet Room Parent=terrain_max:8
+@set Planet Room Parent=terrain_colormap:b b+ y g g+ w x+ r+
+@set Planet Room Parent=terrain_names:deep~water water mud grass hills rocky mountains lava
 
 @echo [ansi(y+,DEBUG: Remove location display from production!)]
-@set Planet Room Parent=caption:Location [locationdisplay(v(#))]
+@set Planet Room Parent=caption:[ansi(y,Location)] [ansi(y,locationdisplay(v(#)))]
