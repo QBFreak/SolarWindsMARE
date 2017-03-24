@@ -1,0 +1,107 @@
+@@ Ported from Sean McCullough's Javascript implementation
+@@ https://gist.github.com/banksean/304522
+@@ QBFreak <qbfreak@qbfreak.net>
+
+@@ Ported from Stefan Gustavson's java implementation
+@@ http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
+@@ Read Stefan's excellent paper for details on how this code works.
+@@
+@@ Sean McCullough banksean@gmail.com
+
+@@
+@@  You can pass in a random number generator object if you like.
+@@  It is assumed to have a random() method.
+@@ 
+
+@defattr Perlin Noise/grad3=inherit function
+@defattr Perlin Noise/seed=inherit function
+@defattr Perlin Noise/p=inherit function
+@defattr Perlin Noise/perm=inherit function
+@defattr Perlin Noise/dot=inherit function
+@defattr Perlin Noise/mix=inherit function
+@defattr Perlin Noise/fade=inherit function
+@defattr Perlin Noise/noise=inherit function
+
+@defattr Perlin Noise/gi000=inherit function
+@defattr Perlin Noise/gi001=inherit function
+@defattr Perlin Noise/gi010=inherit function
+@defattr Perlin Noise/gi011=inherit function
+@defattr Perlin Noise/gi100=inherit function
+@defattr Perlin Noise/gi101=inherit function
+@defattr Perlin Noise/gi110=inherit function
+@defattr Perlin Noise/gi111=inherit function
+
+@defattr Perlin Noise/n000=inherit function
+@defattr Perlin Noise/n100=inherit function
+@defattr Perlin Noise/n010=inherit function
+@defattr Perlin Noise/n110=inherit function
+@defattr Perlin Noise/n001=inherit function
+@defattr Perlin Noise/n101=inherit function
+@defattr Perlin Noise/n011=inherit function
+@defattr Perlin Noise/n111=inherit function
+
+@defattr Perlin Noise/nx00=inherit function
+@defattr Perlin Noise/nx01=inherit function
+@defattr Perlin Noise/nx10=inherit function
+@defattr Perlin Noise/nx11=inherit function
+@defattr Perlin Noise/nxy0=inherit function
+@defattr Perlin Noise/nxy1=inherit function
+@defattr Perlin Noise/nxyz=inherit function
+
+@set Perlin Noise=grad3:[setq(2,{1,1,0 -1,1,0 1,-1,0 -1,-1,0 1,0,1 -1,0,1 1,0,-1 -1,0,-1 0,1,1 0,-1,1 0,1,-1 0,-1,-1}][setq(3,extract(v(2),v(0),1))][ifelse(wcount(v(1)),extract(v(3),v(1),1,{,}),v(3))]
+@set Perlin Noise=seed:[rest(num(me),#)]
+@set Perlin Noise=p:[srand(256,seed(),v(0))]
+
+@@ To remove the need for index wrapping, double the permutation table length
+@set Perlin Noise=perm:[p(band(v(0),255))]
+
+@@ v(0)=grad3(), v(1)=x, v(2)=y, v(3)=z
+@set Perlin Noise=dot:[fadd(fadd(fmul(extract(v(0),1,1,{,}),v(1)),fmul(extract(v(0),2,1,{,}),v(2))),fmul(extract(v(0),3,1,{,}),v(3)))]
+
+@@ v(0)=a, v(1)=b, v(2)=t
+@set Perlin Noise=mix:[fadd(fmul(fsub(1,v(2)),v(0)),fmul(v(2),v(1)))]
+
+@@ v(0)=t
+@set Perlin Noise=fade:fmul(fmul(fmul(fadd(fmul(fsub(fmul(6,v(0)),15),v(0)),10),v(0)),v(0)),v(0))
+
+@@ v(0)=x, v(1)=y, v(2)=z
+@@  Internal vars: v(3)=X, v(4)=Y, v(5)=Z, v(6)=u, v(7)=v, v(8)=w
+@set Perlin Noise=noise:[setq(3,floor(v(0)))][setq(4,floor(v(1)))][setq(5,floor(v()2))][setq(0,fsub(v(0),v(3)))][setq(1,fsub(v(1),v(4)))][setq(2,fsub(v(2),v(5)))][setq(3,band(v(3),255))][setq(4,band(v(4),255))][setq(5,band(v(5),255))][setq(6,fade(v(0)))][setq(7,fade(v(1)))][setq(8,fade(v(2)))][nxyz(v(0),v(1),v(2),v(3),v(4),v(5),v(6),v(7),v(8))]
+
+@@	Calculate a set of eight hashed gradient indices 
+@@   v(0)=X, v(1)=Y, v(2)=Z
+@set Perlin Noise=gi000:[mod(perm(fadd(v(0),perm(fadd(v(1),perm(v(2)))))),12)]
+@set Perlin Noise=gi001:[mod(perm(fadd(v(0),perm(fadd(v(1),perm(fadd(v(2),1)))))),12)]
+@set Perlin Noise=gi010:[mod(perm(fadd(v(0),perm(fadd(fadd(v(1),1),perm(v(2)))))),12)]
+@set Perlin Noise=gi011:[mod(perm(fadd(v(0),perm(fadd(fadd(v(1),1),perm(fadd(v(2),1)))))),12)]
+@set Perlin Noise=gi100:[mod(perm(fadd(fadd(v(0),1),perm(fadd(v(1),perm(v(2)))))),12)]
+@set Perlin Noise=gi101:[mod(perm(fadd(fadd(v(0),1),perm(fadd(v(1),perm(fadd(v(2),1)))))),12)]
+@set Perlin Noise=gi110:[mod(perm(fadd(fadd(v(0),1),perm(fadd(fadd(v(1),1),perm(v(2)))))),12)]
+@set Perlin Noise=gi111:[mod(perm(fadd(fadd(v(0),1),perm(fadd(fadd(v(1),1),perm(fadd(v(2),1)))))),12)]
+
+@@	Calculate noise contributions from each of the eight corners 
+@@	 v(0)=x. v(1)=y. v(2)=z, v(3)=X, v(4)=Y, v(5)=Z
+@set Perlin Noise=n000:[dot(grad3(gi000(v(3),v(4),v(5))),v(0), v(1), v(2))]
+@set Perlin Noise=n100:[dot(grad3(gi100(v(3),v(4),v(5))),fsub(v(0),1), v(1), v(2))]
+@set Perlin Noise=n010:[dot(grad3(gi010(v(3),v(4),v(5))),v(0), fsub(v(1),1), v(2))]
+@set Perlin Noise=n110:[dot(grad3(gi110(v(3),v(4),v(5))),fsub(v(0),1), fsub(v(1),1), v(2))]
+@set Perlin Noise=n001:[dot(grad3(gi001(v(3),v(4),v(5))),v(0), v(1), fsub(v(2),1))]
+@set Perlin Noise=n101:[dot(grad3(gi101(v(3),v(4),v(5))),fsub(v(0),1), v(1), fsub(v(2),1))]
+@set Perlin Noise=n011:[dot(grad3(gi011(v(3),v(4),v(5))),v(0), fsub(v(1),1), fsub(v(2),1))]
+@set Perlin Noise=n111:[dot(grad3(gi111(v(3),v(4),v(5))),fsub(v(0),1), fsub(v(1),1), fsub(v(2),1))]
+
+@@	Interpolate along x the contributions from each of the corners 
+@@	 v(0)=x. v(1)=y. v(2)=z, v(3)=X, v(4)=Y, v(5)=Z, v(6)=u
+@set Perlin Noise=nx00:[mix(n000(v(0),v(1),v(2),v(3),v(4),v(5)), n100(v(0),v(1),v(2),v(3),v(4),v(5)), v(6))]
+@set Perlin Noise=nx01:[mix(n001(v(0),v(1),v(2),v(3),v(4),v(5)), n101(v(0),v(1),v(2),v(3),v(4),v(5)), v(6))]
+@set Perlin Noise=nx10:[mix(n010(v(0),v(1),v(2),v(3),v(4),v(5)), n110(v(0),v(1),v(2),v(3),v(4),v(5)), v(6))]
+@set Perlin Noise=nx11:[mix(n011(v(0),v(1),v(2),v(3),v(4),v(5)), n111(v(0),v(1),v(2),v(3),v(4),v(5)), v(6))]
+
+@@	Interpolate the four results along y 
+@@	 v(0)=x. v(1)=y. v(2)=z, v(3)=X, v(4)=Y, v(5)=Z, v(6)=u, v(7)=v
+@set Perlin Noise=nxy0:[mix(nx00(v(0),v(1),v(2),v(3),v(4),v(5), v(6)), nx10(v(0),v(1),v(2),v(3),v(4),v(5), v(6)), v(7))]
+@set Perlin Noise=nxy1:[mix(nx01(v(0),v(1),v(2),v(3),v(4),v(5), v(6)), nx11(v(0),v(1),v(2),v(3),v(4),v(5), v(6)), v(7))]
+
+@@	Interpolate the two last results along z 
+@@	 v(0)=x. v(1)=y. v(2)=z, v(3)=X, v(4)=Y, v(5)=Z, v(6)=u, v(7)=v, v(8)=w
+@set Perlin Noise=nxyz:[mix(nxy0(v(0),v(1),v(2),v(3),v(4),v(5), v(6), v(7)), nxy1(v(0),v(1),v(2),v(3),v(4),v(5)), v(6), v(7), v(8))]
