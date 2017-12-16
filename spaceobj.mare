@@ -2,7 +2,7 @@
 @@  Controls what planes an object is visible in,
 @@   thus what sectors contain one of this object.
 
-@addparent Space Object Parent=System Function Parent
+@addparent2 Space Object Parent=3D Coordinate System Parent
 @set Space Object Parent=alias:spaceobj
 
 @@ Take the dbref, turn it into a number from 1-9
@@ -13,8 +13,10 @@
 @@ These two functions exist so that we can override them and duplicate things in a test system
 @defattr Space Object Parent/get_loc=inherit function
 @defattr Space Object Parent/get_plane=inherit function
+@defattr Space Object Parent/get_num=inherit function
 @set Space Object Parent=get_loc:[loc(me)]
 @set Space Object Parent=get_plane:[plane(v(#))]
+@set Space Object Parent=get_num:[num(me)]
 
 @defattr Space Object Parent/frequency=inherit function
 @set Space Object Parent=frequency:10
@@ -24,7 +26,7 @@
 @set Space Object Parent=prand:[srand(iftrue(v(0),frequency()),add(rest(get_loc(),#),div(get_plane(),9999)),mod(get_plane(),9999))]
 
 @set Space Object Parent=lock:#0
-@set Space Object Parent=vlock:[eq(prand(),adddigits(num(me)))]
+@set Space Object Parent=vlock:[eq(prand(),adddigits(get_num()))]
 
 @defattr Space Object Parent/color_list=function inherit
 @defattr Space Object Parent/get_color=inherit function
