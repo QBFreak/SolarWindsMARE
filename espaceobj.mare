@@ -2,16 +2,20 @@
 @@  This parent provides the functionality for enterable space objects like Planets and Asteroids
 
 @addparent2 Enterable Space Object=Name Database
+@sql CREATE TABLE IF NOT EXISTS enterable_space_objects (plane INT, source TEXT, destination TEXT)
 
 @@ Keep the parent from executing anything
 @set Enterable Space Object Parent=haven
 
 @set Enterable Space Object Parent=alias:espaceobj
 @set Enterable Space Object Parent=caption:[spc(1)]
+@@ Set a blank desc to override the desc from the Name Database parent
+@set Enterable Space Object Parent=desc:[spc(1)]
 @set Enterable Space Object Parent=idesc:You head down to the surface.
 
 @defattr Enterable Space Object Parent/roomid=inherit function
-@set Enterable Space Object=roomid:[v(strcat(roomid_,plane(v(#))))]
+@@set Enterable Space Object=roomid:[v(strcat(roomid_,plane(v(#))))]
+@set Enterable Space Object=roomid:[sql(s(SELECT destination FROM enterable_space_objects WHERE plane=[plane(v(#))] AND source="[num(me)]"))]
 
 @defattr Enterable Space Object/tr_dig=inherit
 @defattr Enterable Space Object/tr_teldown=inherit
@@ -38,8 +42,9 @@
 	@@ @tr_dig=#playerid
 	@@  This is a trigger to keep @iter and v(n) from being a mess;
 	@iter * created with room number *.= { @dig Room },{
-		@defattr me/roomid_[plane(v(0))];
-		@set me=roomid_[plane(v(0))]:\[v(1)];
+        @sql INSERT INTO enterable_space_objects VALUES ([plane(v(0))], "[num(me)]", "\[v(1)]");
+        @@defattr me/roomid_[plane(v(0))];
+		@@set me=roomid_[plane(v(0))]:\[v(1)];
 		@set \[v(1)]=floating;
 		@foreach \[zone(v(1))]=@delzone \[v(1)]=\\\[v(0)];
 		@set \[v(1)]=color:;
@@ -50,5 +55,3 @@
 	}
 .
 #mupdate off
-
-
