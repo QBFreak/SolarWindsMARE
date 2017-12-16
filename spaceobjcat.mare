@@ -1,0 +1,62 @@
+@@ Space Object Catalog
+@@  Runs through all the planes in 3D planar space and calculates the
+@@  visibility of a space object, recording the results.
+
+@@addparent2 Space Object Catalog=Space Object Parent
+
+@defattr Space Object Catalog/tr_precatalog=inherit
+@defattr Space Object Catalog/tr_catalog=inherit
+@defattr Space Object Catalog/tr_postcatalog=inherit
+@defattr Space Object Catalog/catattrs=function
+@defattr Space Object Catalog/triggerer=function
+
+@set Space Object Catalog=color:[colorword(name(me))]
+@set Space Object Catalog=cname:[colorwordcname(name(me))]
+@@set Space Object Catalog=vlock:!#0
+@set Space Object Catalog=lock:[owner(me)]
+@set Space Object Catalog=alias:cat
+
+@set Space Object Catalog=get_loc:#26
+@set Space Object Catalog=get_plane:0
+@set Space Object Catalog=get_num:#132
+@@set Space Object Catalog=frequency:10
+
+#mupdate on
+@set Space Object Catalog=tr_precatalog:
+	@foreach [catattrs()]={
+		@undefattr me/\[v(0)];
+	};
+	@set me=catattrs:;
+	@set me=get_plane:0;
+	@set me=vlock:;
+	@set me=triggerer:[v(#)];
+.
+
+@set Space Object Catalog=tr_catalog:
+	@switch [s(v(vlock))]=1,{
+		@switch [land(lt(inc(add(strlen(v(setr(1,extract(wordflip(lattrdef(me)),wmatch(wordflip(lattrdef(me)),cat_*),1)))),strlen(get_plane()))),8000),wmatch(lattrdef(me),cat_*))]=1,{
+			@edit me/[v(1)]=$,{ [get_plane()]};
+		},{
+			@pemit [triggerer()]=Tested [get_plane()] sectors so far, found [unparse(get_num())] [inc(wcount(v(v(1))))] times;
+			@defattr me/[setr(1,iftrue(strcat(cat_,inc(last(v(1),_))),cat_0))];
+			@set me=[v(1)]:[get_plane()];
+			@switch [wcount(catattrs())]=0,{
+				@set me=catattrs:[v(1)];
+			},{
+				@edit me/catattrs=$,{ [v(1)]};
+			};
+		};
+	};
+	@set me=get_plane:[inc(v(0))];
+	@tr me/tr_catalog=[inc(v(0))];
+.
+
+@set Space Object Catalog=tr_postcatalog:
+	@set me=vlock:!#0;
+	@foreach [catattrs()][setq(1,0)]={
+		@echo \[setq(1,add(v(1),wcount(v(0))))];
+	};
+	@pemit [triggerer()]=Found [v(1)] sectors containing [unparse(get_num())].;
+.
+
+#mupdate off
