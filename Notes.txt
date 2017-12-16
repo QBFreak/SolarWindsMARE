@@ -25,3 +25,8 @@ Other system data:
 Dig system
 Use exit to determine system room number
 @foreach [zone(here)]=@delzone here=\[v(0)]
+
+
+“You say smuggler. I say revenue-optimal crewmember. It’s a question of perspective.”
+
+Lowell, Nathan. In Ashes Born (A Seeker's Tale From The Golden Age Of The Solar Clipper Book 1) (Kindle Locations 3049-3050). Durandus. Kindle Edition. 
