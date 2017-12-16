@@ -1,0 +1,20 @@
+@@ TEST Planet Room Parent v1.0
+
+@@ Keep the parent from executing anything
+@set TEST Planet Room Parent=haven
+
+
+@@ Planar room support @@
+
+@addparent2 TEST Planet Room Parent=Planet Function Parent
+@@addparent2 TEST Planet Room Parent=2D Terrain Parent v2
+
+@@ Generate room details @@
+
+@set TEST Planet Room Parent=terrain_min:1
+@set TEST Planet Room Parent=terrain_max:8
+@set TEST Planet Room Parent=terrain_colormap:b b+ y g g+ w x+ r+
+@set TEST Planet Room Parent=terrain_names:deep~water water mud grass hills rocky mountains lava
+
+@echo [ansi(y+,DEBUG: Remove location display from production!)]
+@set TEST Planet Room Parent=caption:[ansi(y,Location)] [ansi(y,locationdisplay(v(#)))]
