@@ -1,6 +1,6 @@
 @@ 2D Coordinate System Parent v1.0
 @@  Support functions for a 2D planar room
-@@  
+@@
 
 
 @@ Planar coordinate encode/decode system @@
@@ -10,7 +10,7 @@
 @@				46,340	Square root (rounded down to decimal) of max plane
 @@				23,169	Above halved, decremented, such that we can use it as an offset and still fall within our root
 @@
-@@ Works with coordinates from -46,340.-46,340 to +46,340.+46,340 for an area of 2,147,395,600 planar rooms per actual room
+@@ Works with coordinates from -23,169.-23,169 to +23,169.+23,169 for an area of 2,147,395,600 planar rooms per actual room
 
 @@ Keep the parent from executing anything
 @set 2D Coordinate System Parent=haven
