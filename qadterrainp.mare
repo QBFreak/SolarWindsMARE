@@ -1,0 +1,36 @@
+@@ Quick and Dirty 2D Terrain Parent v1.0
+@@  Generate random terrain values for a planet that uses the
+@@	2D Coordinate System. @Desc and @Color are set from these values
+
+@set Quick and Dirty 2D Terrain Parent=haven
+
+@addparent2 Quick and Dirty 2D Terrain Parent=2D Coordinate System Parent
+
+@set Quick and Dirty 2D Terrain Parent=color:[extract(v(terrain_colormap),terrain_generate(plane(v(#))),1)]
+@set Quick and Dirty 2D Terrain Parent=desc:[capstr(edit(extract(v(terrain_names),terrain_generate(plane(v(#))),1),~,{ }))]
+
+
+@@ Settings @@
+
+@defattr Quick and Dirty 2D Terrain Parent/terrain_min=inherit function
+@defattr Quick and Dirty 2D Terrain Parent/terrain_max=inherit function
+@defattr Quick and Dirty 2D Terrain Parent/terrain_colormap=inherit function
+@defattr Quick and Dirty 2D Terrain Parent/terrain_names=inherit function
+@defattr Quick and Dirty 2D Terrain Parent/terrain_seed=inherit function
+
+
+@@ Functions @@
+
+@defattr Quick and Dirty 2D Terrain Parent/terrain_generate=inherit function
+
+@@ terrain_seed(<plane>)
+@@  Note: once the DB gets up around 400,000 this might start overflowing,
+@@  although it doesn't look like srand() cares about the signedness of the
+@@  number, so it's not likely to be an issue.
+@set Quick and Dirty 2D Terrain Parent=terrain_seed:[add(rest(num(me),#),v(0))]
+
+
+@@ Functions @@
+
+@@ terrain_generate(<plane>)
+@set Quick and Dirty 2D Terrain Parent=terrain_generate:[add(srand(inc(sub(terrain_max(),terrain_min())),terrain_seed(v(0)),1),terrain_min())]
