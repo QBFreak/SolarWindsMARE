@@ -1,0 +1,40 @@
+@@ rover.mare - Planetary Rover v1.0
+@@  Semi-randomly roams a planet, recording data
+
+@@ Rover core
+@defattr Rover/direction=function
+@defattr Rover/do_move
+@defattr Rover/steps=function
+
+@@ Data collection
+@defattr Rover/high=function
+@defattr Rover/low=function
+
+@set Rover=direction:North
+#mupdate on
+@set Rover=do_move:
+    @switch gt(terrain_value(),high())=1,{
+        @set me=high:[terrain_value()]
+    };
+    @set me=steps:[inc(v(steps))];
+    @switch lt(terrain_value(),low())=1,{
+        @set me=low:[terrain_value()]
+    };
+    @@ If (steps % 1000 == 0) OR we are on one of the edges (where x or y ==
+    @@  23,169) then do the second bit. Otherwise do the first bit. I really
+    @@  should flip this around. By the way. Let my know if you figure out how
+    @@  on earth it keeps moving after it changes direction. It should get
+    @@  stuck in an endless loop, constantly changing direction.;
+    @switch land(mod(v(steps),1000),land(not(eq(planetox(plane(me)),23169)),not(eq(planetoy(plane(me)),23169))))=1,{
+        [direction()];
+    },{
+        @set me=direction:[randword(setdiff(North South East West,direction()))];
+        @tr me/do_move;
+    };
+.
+#mupdate off
+@set Rover=Amove:@tr me/do_move
+@@set Rover=steps:0
+
+@@set Rover=high:0
+@@set Rover=low:100
