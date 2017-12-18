@@ -21,6 +21,7 @@
 @defattr 2D Terrain Parent v2/terrain_value=inherit function
 @defattr 2D Terrain Parent V2/terrain_color=inherit function
 @defattr 2D Terrain Parent V2/terrain_name=inherit function
+@defattr 2D Terrain Parent V2/terrain_displayindex=inherit function
 
 
 @@ Data @@
@@ -76,4 +77,9 @@
 @@  terrain_names()
 @set 2D Terrain Parent V2=terrain_name:[setq(0,iftrue(v(0),v(#)))][edit(extract(terrain_names(),terrain_value(v(0)),1),~,{ })]
 
+@@ terrain_displayindex(<index>)
+@@  Return an ansi-formatted string of the terrain name, looked up by <index>
+@set 2D Terrain Parent V2=terrain_displayindex:[ansi(extract(terrain_colormap(),v(0),1),capstr(extract(terrain_names(),v(0),1)))]
+
+@@   I think --v is supposed to be v(0) not 0
 @@echo [setq(1,0)][setq(3,8)][setq(4,0)][foreach(lnum(10),[setq(2,int(fmul(fdiv(fadd(noise3(planetox(v(0)),planetoy(v(1)),terrain_seed()),1),2),wcount(terrain_colormap()))))][setq(3,ifelse(lt(v(2),v(3)),v(2),v(3)))][setq(4,ifelse(gt(v(2),v(4)),v(2),v(4)))])][v(3)] [v(4)]
