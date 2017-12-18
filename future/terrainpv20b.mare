@@ -1,20 +1,16 @@
-@@ 2D Terrain Parent v2 v2.0b
-@@  Generate slowly changing terrain values based on a starting value
-@@  WORK IN PROGRESS
+@@ 2D Terrain Parent v2 v2.1b
+@@  Generate terrain values based on a noise function
 
 @set 2D Terrain Parent v2=haven
 
 @addparent2 2D Terrain Parent v2=2D Coordinate System Parent
 
-@set 2D Terrain Parent v2=color:[extract(v(terrain_colormap),terrain_lookup(planetox(plane(v(#))),planetoy(plane(v(#)))),1)]
-@set 2D Terrain Parent v2=desc:[capstr(edit(extract(v(terrain_names),terrain_lookup(planetox(plane(v(#))),planetoy(plane(v(#)))),1,~),~,{ }))]
+@set 2D Terrain Parent v2=color:[terrain_color()]
+@set 2D Terrain Parent v2=desc:[capstr(terrain_name())]
 
 
 @@ Settings @@
 
-@defattr 2D Terrain Parent v2/terrain_start=inherit function
-@defattr 2D Terrain Parent v2/terrain_min=inherit function
-@defattr 2D Terrain Parent v2/terrain_max=inherit function
 @defattr 2D Terrain Parent v2/terrain_colormap=inherit function
 @defattr 2D Terrain Parent v2/terrain_names=inherit function
 @defattr 2D Terrain Parent v2/terrain_seed=inherit function
@@ -22,8 +18,9 @@
 
 @@ Functions @@
 
-@defattr 2D Terrain Parent v2/terrain_lookup=inherit function
-@defattr 2D Terrain Parent v2/terrain_generate=inherit function
+@defattr 2D Terrain Parent v2/terrain_value=inherit function
+@defattr 2D Terrain Parent V2/terrain_color=inherit function
+@defattr 2D Terrain Parent V2/terrain_name=inherit function
 
 
 @@ Data @@
@@ -33,75 +30,50 @@
 
 
 @@ Triggers @@
-@defattr 2D Terrain Parent v2/tr_terrain_add=inherit
-@defattr 2D Terrain Parent v2/tr_terrain_generate=inherit
 
 
 @@ SETTINGS - configurable per-planet @@
 
-@set 2D Terrain Parent v2=terrain_start:4
-@set 2D Terrain Parent v2=terrain_min:1
-@set 2D Terrain Parent v2=terrain_max:8
+@@ @terrain_colormap and @terrain_names both need to contain the same number of
+@@  entries, which should correspond with each other based on position
+@@  For instance: if the first name is 'deep water' then the first color is
+@@  likely b (dark blue). Please note that names that contain spaces should
+@@  substitute a tilde for the space (deep~water) as these are space-delimited
+@@  lists. These two lists can be overridden at the planetary (room) level
+@@  without the need to change the parent.
 @set 2D Terrain Parent v2=terrain_colormap:b b+ y g g+ w x+ r+
 @set 2D Terrain Parent v2=terrain_names:deep~water water mud grass hills rocky mountains lava
 
 @@ terrain_seed(<plane>)
 @@  Note: once the DB gets up around 400,000 this might start overflowing,
-@@  although it doesn't look like srand() cares about the signedness of the
-@@  number, so it's not likely to be an issue.
-@set 2D Terrain Parent v2=terrain_seed:[add(rest(num(me),#),v(0))]
+@@  although noise3() doesn't cares about the signedness of the number, so it's
+@@  not likely to be an issue.
+@set 2D Terrain Parent v2=terrain_seed:[add(rest(num(room(me)),#),v(0))]
+@@  This might be a dumb question, but why is this terrain_seed(<plane>)?
+@@  What has <plane> got to do with it? Current usage (in terrain_value) ignores
+@@  this extra param by invoking it as terrain_seed()
 
 
 @@ Functions @@
 
-@@ terrain_lookup(<x>,<y>)
-@set 2D Terrain Parent v2=terrain_lookup:[rest(extract(v(terrain),wmatch(v(terrain),strcat(v(0),.,v(1),~*)),1),~)]
-@@ terrain_generate(<x>,<y>)
-@set 2D Terrain Parent v2=terrain_generate:[setq(2,dec(srand(3,terrain_seed(enccoord(v(0),v(1))),1)))][if(land(eq(v(0),0),eq(v(1),0)),terrain_start())][if(land(eq(v(0),0),neq(v(1),0)),range(add(terrain_lookup(v(0),add(v(1),ifelse(lt(v(1),0),1,-1))),v(2)),terrain_min(),terrain_max()))][if(land(neq(v(0),0),eq(v(1),0)),range(add(terrain_lookup(add(v(0),ifelse(lt(v(0),0),1,-1)),v(1)),v(2)),terrain_min(),terrain_max()))][if(land(neq(v(0),0),neq(v(1),0)),range(round(avg(terrain_lookup(add(v(0),ifelse(lt(v(0),0),1,-1)),v(1)),terrain_lookup(v(0),add(v(1),ifelse(lt(v(1),0),1,-1))))),terrain_min(),terrain_max()))]
+@@ terrain_value([<object>])
+@@  Return the value of the terrain for the coords at the invoker's current
+@@  location (or the coords at the specified object's location). Value is in the
+@@  range 1-wcount(terrain_names()) and is seeded based on terrain_seed()
+@set 2D Terrain Parent V2=terrain_value:[setq(0,iftrue(v(0),v(#)))][inc(int(fmul(fdiv(fadd(noise3(planetox(plane(v(0))),planetoy(plane(v(0))),terrain_seed()),1),2),wcount(terrain_colormap()))))]
 
-#mupdate on
-@set 2D Terrain Parent v2=tr_terrain_add:
-	@switch [land(isnum(v(0)),land(isnum(v(1)),isnum(v(2))))]=1,{
-		@set me=terrain:[setunion(v(terrain),strcat(v(0),.,v(1),~,v(2)))];
-	};
-.
+@@ terrain_color([object])
+@@  Return the color value of the terrain for the coords at the invoker's
+@@  current location (or the coords at the specified object's location).
+@@  terrain_value() is used as an index to look the color value up from
+@@  terrain_colormap()
+@set 2D Terrain Parent V2=terrain_color:[setq(0,iftrue(v(0),v(#)))][extract(terrain_colormap(),terrain_value(v(0)),1)]
 
-@set 2D Terrain Parent v2=tr_terrain_generate:
-@@ @tr_terrain_generate=<x>,<y>;
-@@	Will generate terrain values for a 3x3 grid surrounding x,y (skipping;
-@@	rooms that already have values);
-	@switch [land(isnum(v(0)),isnum(v(1)))]=1,{
-		@foreach [setq(2,v(0)][setq(3,v(1))][foreach(lnum(3),[setq(4,v(0))][foreach(lnum(3),[add(dec(v(4)),v(2))].[add(dec(v(0)),v(3))])])]={
-			@@emit \\\[v(0)];
-			@@emit '\\\[terrain_lookup(setr(4,first(v(0),.)),setr(5,last(v(0),.)))]'=\\\[wcount(terrain_lookup(setr(4,first(v(0),.)),setr(5,last(v(0),.))))];
-			@switch \\\[wcount(terrain_lookup(setr(4,first(v(0),.)),setr(5,last(v(0),.))))]=0,{
-				@tr me/tr_terrain_add=\\\[v(4)],\\\[v(5)],\\\[terrain_generate(v(4),v(5))];
-			};
-		};
-	};
-.
-#mupdate off
+@@ terrain_name([object])
+@@  Return the name value of the terrain for the coords at the invoker's
+@@  current location (or the coords at the specified object's location).
+@@  terrain_value() is used as an index to look the name value up from
+@@  terrain_names()
+@set 2D Terrain Parent V2=terrain_name:[setq(0,iftrue(v(0),v(#)))][edit(extract(terrain_names(),terrain_value(v(0)),1),~,{ })]
 
-#mupdate ignore
-
-@@ 0.0 - return starting value
-[if(land(eq(v(0),0),eq(v(1),0)),terrain_start())]
-
-@@ Current random value
-[setq(2,dec(srand(3,terrain_seed(),1)))]
-
-@@ 0.y - get Y one step closer to y=0 and add our random number to it
-[if(land(eq(v(0),0),neq(v(1),0)),range(add(terrain_lookup(v(0),add(v(1),ifelse(lt(v(1),0),1,-1))),v(2)),terrain_min(),terrain_max()))]
-
-@@ x.0 - get X one step closer to x=0 and add our random number to it
-[if(land(neq(v(0),0),eq(v(1),0)),range(add(terrain_lookup(add(v(0),ifelse(lt(v(0),0),1,-1)),v(1)),v(2)),terrain_min(),terrain_max()))]
-
-@@ x,y - get X one step closer to x=0, and Y one step closer to y=0 amd average the two
-[if(land(neq(v(0),0),neq(v(1),0)),range(round(avg(terrain_lookup(add(v(0),ifelse(lt(v(0),0),1,-1)),v(1)),terrain_lookup(v(0),add(v(1),ifelse(lt(v(1),0),1,-1))))),terrain_min(),terrain_max()))]
-
-
-
-@@ Random number, added to current number, pulled into range of min/max
-range(add(,v(2)),terrain_min(),terrain_max())
-
-
+@@echo [setq(1,0)][setq(3,8)][setq(4,0)][foreach(lnum(10),[setq(2,int(fmul(fdiv(fadd(noise3(planetox(v(0)),planetoy(v(1)),terrain_seed()),1),2),wcount(terrain_colormap()))))][setq(3,ifelse(lt(v(2),v(3)),v(2),v(3)))][setq(4,ifelse(gt(v(2),v(4)),v(2),v(4)))])][v(3)] [v(4)]

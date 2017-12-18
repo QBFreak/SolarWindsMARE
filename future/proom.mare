@@ -1,4 +1,4 @@
-@@ TEST Planet Room Parent v1.0
+@@ TEST Planet Room Parent v2.1b
 
 @@ Keep the parent from executing anything
 @set TEST Planet Room Parent=haven
@@ -11,8 +11,6 @@
 
 @@ Generate room details @@
 
-@set TEST Planet Room Parent=terrain_min:1
-@set TEST Planet Room Parent=terrain_max:8
 @set TEST Planet Room Parent=terrain_colormap:b b+ y g g+ w x+ r+
 @set TEST Planet Room Parent=terrain_names:deep~water water mud grass hills rocky mountains lava
 
