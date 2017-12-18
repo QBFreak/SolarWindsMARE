@@ -9,4 +9,4 @@ The MARE isn't operational for general players quite yet, but if you're interest
  * [SolarWindsMARE Modified TinyMARE Souce](https://github.com/QBFreak/TinyMARE/releases/tag/v1.0.10339.74)
    * We've modified  the TinyMARE souce a bit to give us some tools we desperately needed to keep this project going. If you intend to try and bring up your own instance of SolarWindsMARE you'll want to build TinyMARE from these sources. (Specifically the release in this above link.)
  * [TinyMARE Source](https://www.winds.org/pub/tinymare/)
-   * This is the original TinyMARE souce, as maintained by Gandalf. Despite the changes made above, this is the backbone of SolarWindsMARE.
+   * This is the original TinyMARE source, as maintained by Gandalf. Despite the changes made above, this is the backbone of SolarWindsMARE.
