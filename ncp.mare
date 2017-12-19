@@ -6,21 +6,22 @@
 
 #mupdate on
 @@set NCParent=Desc:
-	Current sector [get_sector()]%r
-
---------------[setq(1,foreach(lexits(loc(ship())),[last(first(name(v(0)),>),<)]))]%r
-|      [ifelse(wmatch(v(1),N),N,{ })]  [ifelse(wmatch(v(1),U),U,{ })]   |%r
-|      [ifelse(wmatch(v(1),N),|,{ })] [ifelse(wmatch(v(1),U),/,{ })]    |%r
-| [ifelse(wmatch(v(1),W),W --,{    })] * [ifelse(wmatch(v(1),E),-- E,{    })] |%r
-|    [ifelse(wmatch(v(1),D),/,{ })] [ifelse(wmatch(v(1),S),|,{ })]      |%r
-|   [ifelse(wmatch(v(1),D),D,{ })]  [ifelse(wmatch(v(1),S),S,{ })]      |%r
---------------
+@@	Current sector [get_sector()]%r
+@@
+@@--------------[setq(1,foreach(lexits(loc(ship())),[last(first(name(v(0)),>),<)]))]%r
+@@|      [ifelse(wmatch(v(1),N),N,{ })]  [ifelse(wmatch(v(1),U),U,{ })]   |%r
+@@|      [ifelse(wmatch(v(1),N),|,{ })] [ifelse(wmatch(v(1),U),/,{ })]    |%r
+@@| [ifelse(wmatch(v(1),W),W --,{    })] * [ifelse(wmatch(v(1),E),-- E,{    })] |%r
+@@|    [ifelse(wmatch(v(1),D),/,{ })] [ifelse(wmatch(v(1),S),|,{ })]      |%r
+@@|   [ifelse(wmatch(v(1),D),D,{ })]  [ifelse(wmatch(v(1),S),S,{ })]      |%r
+@@--------------
 .
 
 @set NCParent=Desc:
 	Current Sector:		[ansi(y+,get_sector())]%r
 	Current Course:		[ansi(b+,get_course())]%r
 	Course distance:	[ansi(w+,courselen())] sectors%r
+    Speed:		    [ansi(w,v(speed))]%r
 	Helm:			[switch(truth(wmatch(lsema(me),tr_step)),1,ansi(g+,engaged),ansi(x+,idle))]
 .
 #mupdate off
@@ -45,9 +46,14 @@
 @set NCParent=clenz:[abs(sub(coursez(),getz()))]
 @set NCParent=courselen:[add(add(clenx(),cleny()),clenz())]
 
+@defattr NCParent/speed=function inherit
+@set NCParent=speed:0
+
 @defattr NCParent/cmd_laycourse=inherit
 @defattr NCParent/cmd_engage=inherit
 @defattr NCParent/cmd_allstop=inherit
+@defattr NCParent/cmd_speed=inherit
+@defattr NCParent/cmd_speedset=inherit
 
 @defattr NCParent/cmd_onscreen=inherit
 @defattr NCParent/cmd_offscreen=inherit
@@ -60,7 +66,7 @@
 @defattr NCParent/tr_shipmove=inherit
 
 #mupdate on
-@set NCParent=cmd_do:$>*:/[not(lor(wmatch(course engage view viewscreen,first(v(0))),match(v(0),all stop)))]/
+@set NCParent=cmd_do:$>*:/[not(lor(wmatch(course engage speed view viewscreen,first(v(0))),match(v(0),all stop)))]/
 	@fo [ship()]={[v(0)]};
 .
 
@@ -90,6 +96,19 @@
 @set NCParent=cmd_allstop:$all stop:
 	@cancel [num(me)]=tr_step;
 	@tr me/tr_notify={The ship has stopped},%#;
+.
+
+@set NCParent=cmd_speed:$speed:
+    @tr me/tr_notify={The current speed is [v(speed)]},%#;
+.
+
+@set NCParent=cmd_speedset:$speed *:
+    @switch land(isnum(v(0)),between(v(0),0,10))=1,{
+        @set me=speed:[v(0)];
+        @tr me/tr_notify={Speed adjusted to [v(0)]},%#
+    },{
+        @tr me/tr_notify={Valid speeds are 0-10},%#;
+    };
 .
 
 @set NCParent=cmd_onscreen:$onscreen:
@@ -132,7 +151,13 @@
 		},z,{
 			@fo [ship()]=[ifelse(gt(coursez(),getz()),U,D)];
 		};
-		@wait 2/tr_step=@tr me/tr_step;
+		@@wait 2/tr_step=@tr me/tr_step;
+        @switch v(speed)=0,{
+            @cancel [num(me)]=tr_step;
+        	@tr me/tr_notify={The ship has stopped};
+        },{
+            @wait [sub(10,v(speed))]/tr_step=@tr me/tr_step;
+        };
 	};
 .
 
@@ -154,5 +179,3 @@
 	};
 .
 #mupdate off
-
-
