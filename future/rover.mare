@@ -5,6 +5,7 @@
 @defattr Rover/direction=function
 @defattr Rover/do_move
 @defattr Rover/steps=function
+@defattr Rover/changefreq=function
 
 @@ Data collection
 @defattr Rover/high=function
@@ -28,12 +29,16 @@
     @switch land(mod(v(steps),1000),land(neq(abs(planetox(plane(me))),23169),neq(abs(planetoy(plane(me))),23169)))=1,{
         [direction()];
     },{
-        @set me=direction:[randword(setdiff(North South East West,direction()))];
+        @switch rand(changefreq())=0,{
+            @@ The rover has a one-in-10 chance of changing direction ;
+            @set me=direction:[randword(setdiff(North South East West,direction()))];
+        };
         @tr me/do_move;
     };
 .
 #mupdate off
 @set Rover=Amove:@tr me/do_move
+@set Rover=changefreq:100
 @@set Rover=steps:0
 
 @@set Rover=high:0
