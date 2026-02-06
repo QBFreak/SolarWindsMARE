@@ -32,6 +32,7 @@
         @switch rand(changefreq())=0,{
             @@ The rover has a one-in-10 chance of changing direction ;
             @set me=direction:[randword(setdiff(North South East West,direction()))];
+            [direction()];
         };
         @tr me/do_move;
     };
