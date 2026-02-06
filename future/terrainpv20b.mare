@@ -1,12 +1,17 @@
 @@ 2D Terrain Parent v2 v2.1b
 @@  Generate terrain values based on a noise function
 
+@@ @sql CREATE TABLE IF NOT EXISTS terrain_[rest(room(me),#)] (plane INT, terrain_name TEXT, terrain_color TEXT, terrain_amount INT)
+
 @set 2D Terrain Parent v2=haven
 
 @addparent2 2D Terrain Parent v2=2D Coordinate System Parent
+@addparent2 2D Terrain Parent v2=2D Subterranean Parent
 
-@set 2D Terrain Parent v2=color:[terrain_color()]
-@set 2D Terrain Parent v2=desc:[capstr(terrain_name())]
+@@ Retrieve terrain_color and terrain_name from the database, or fall back on
+@@  terrain_color() and terrain_name() if they are not in the database
+@set 2D Terrain Parent v2=color:[iftrue(sql(s(SELECT terrain_color FROM terrain_[rest(room(v(#)),#)] WHERE plane=[plane(v(#))])),terrain_color())]
+@set 2D Terrain Parent v2=desc:[capstr(iftrue(sql(s(SELECT terrain_name FROM terrain_[rest(room(v(#)),#)] WHERE plane=[plane(v(#))])),terrain_name()))]
 
 
 @@ Settings @@
