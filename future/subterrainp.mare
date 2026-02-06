@@ -1,24 +1,25 @@
-@@ 2D Subterrainian Parent v1.0
-@@  Generate Subterraining terrain values based on a noise function
+@@ 2D Subterranean Parent v1.0
+@@  Generate Subterranean terrain values based on a noise function
 
-@set 2D Subterrainian Parent=haven
+@set 2D Subterranean Parent=haven
 
-@addparent2 2D Subterrainian Parent=2D Coordinate System Parent
+@addparent2 2D Subterranean Parent=2D Coordinate System Parent
 
 
 @@ Settings @@
 
-@defattr 2D Subterrainian Parent/subterrain_colormap=inherit function
-@defattr 2D Subterrainian Parent/subterrain_names=inherit function
-@defattr 2D Subterrainian Parent/subterrain_seed=inherit function
+@defattr 2D Subterranean Parent/subterrain_colormap=inherit function
+@defattr 2D Subterranean Parent/subterrain_names=inherit function
+@defattr 2D Subterranean Parent/subterrain_seed=inherit function
 
 
 @@ Functions @@
 
-@defattr 2D Subterrainian Parent/subterrain_value=inherit function
-@defattr 2D Subterrainian Parent/subterrain_color=inherit function
-@defattr 2D Subterrainian Parent/subterrain_name=inherit function
-@defattr 2D Subterrainian Parent/subterrain_displayindex=inherit function
+@defattr 2D Subterranean Parent/subterrain_value=inherit function
+@defattr 2D Subterranean Parent/subterrain_color=inherit function
+@defattr 2D Subterranean Parent/subterrain_name=inherit function
+@defattr 2D Subterranean Parent/subterrain_displayindex=inherit function
+@defattr 2D Subterranean Parent/subterrain_amount=inherit function
 
 
 @@ SETTINGS - configurable per-planet @@
@@ -30,14 +31,14 @@
 @@  substitute a tilde for the space (deep~water) as these are space-delimited
 @@  lists. These two lists can be overridden at the planetary (room) level
 @@  without the need to change the parent.
-@set 2D Subterrainian Parent=subterrain_colormap:b b+ y g g+ w x+ r+
-@set 2D Subterrainian Parent=subterrain_names:deep~water water mud grass hills rocky mountains lava
+@set 2D Subterranean Parent=subterrain_colormap:b w r
+@set 2D Subterranean Parent=subterrain_names:dirt rock iron
 
 @@ subterrain_seed()
 @@  Note: once the DB gets up around 400,000 this might start overflowing,
 @@  although noise3() doesn't cares about the signedness of the number, so it's
 @@  not likely to be an issue.
-@set 2D Subterrainian Parent=subterrain_seed:[add(rest(num(room(me)),#),-1024)]
+@set 2D Subterranean Parent=subterrain_seed:[add(rest(num(room(me)),#),-1024)]
 
 
 @@ Functions @@
@@ -46,22 +47,28 @@
 @@  Return the value of the terrain for the coords at the invoker's current
 @@  location (or the coords at the specified object's location). Value is in the
 @@  range 1-wcount(subterrain_names()) and is seeded based on subterrain_seed()
-@set 2D Subterrainian Parent=subterrain_value:[setq(0,iftrue(v(0),v(#)))][inc(int(fmul(fdiv(fadd(noise3(planetox(plane(v(0))),planetoy(plane(v(0))),subterrain_seed()),1),2),wcount(subterrain_colormap()))))]
+@set 2D Subterranean Parent=subterrain_value:[setq(0,iftrue(v(0),v(#)))][inc(int(fmul(fdiv(fadd(noise3(planetox(plane(v(0))),planetoy(plane(v(0))),subterrain_seed()),1),2),wcount(subterrain_colormap()))))]
 
 @@ subterrain_color([object])
 @@  Return the color value of the subterrain for the coords at the invoker's
 @@  current location (or the coords at the specified object's location).
 @@  subterrain_value() is used as an index to look the color value up from
 @@  subterrain_colormap()
-@set 2D Subterrainian Parent=subterrain_color:[setq(0,iftrue(v(0),v(#)))][extract(subterrain_colormap(),subterrain_value(v(0)),1)]
+@set 2D Subterranean Parent=subterrain_color:[setq(0,iftrue(v(0),v(#)))][extract(subterrain_colormap(),subterrain_value(v(0)),1)]
 
 @@ subterrain_name([object])
 @@  Return the name value of the subterrain for the coords at the invoker's
 @@  current location (or the coords at the specified object's location).
 @@  subterrain_value() is used as an index to look the name value up from
 @@  subterrain_names()
-@set 2D Subterrainian Parent=subterrain_name:[setq(0,iftrue(v(0),v(#)))][edit(extract(subterrain_names(),subterrain_value(v(0)),1),~,{ })]
+@set 2D Subterranean Parent=subterrain_name:[setq(0,iftrue(v(0),v(#)))][edit(extract(subterrain_names(),subterrain_value(v(0)),1),~,{ })]
 
 @@ subterrain_displayindex(<index>)
 @@  Return an ansi-formatted string of the subterrain name, looked up by <index>
-@set 2D Subterrainian Parent=subterrain_displayindex:[ansi(extract(subterrain_colormap(),v(0),1),capstr(extract(subterrain_names(),v(0),1)))]
+@set 2D Subterranean Parent=subterrain_displayindex:[ansi(extract(subterrain_colormap(),v(0),1),capstr(extract(subterrain_names(),v(0),1)))]
+
+@@ subterrain_amount([<object>])
+@@  Return the amount of material of the subterrain for the coords at then
+@@  invoker's current location (or the coords at the specified object's
+@@  location).
+@set 2D Subterranean Parent=subterrain_amount:[setq(0,iftrue(v(0),v(#)))][srand(255,add(room(v(0)),div(plane(v(0)),10000)),mod(plane(v(0)),10000))]
