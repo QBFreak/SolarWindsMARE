@@ -1,4 +1,7 @@
-@addparent me=System Function Parent
+@addparent me=Comtitle Manager Parent
+@@addparent me=Foo
+@addparent me=Player Character Parent
+@@addparent me=System Function Parent
 
 @defattr me/cmd_limbo
 @defattr me/cmd_lab
@@ -12,31 +15,72 @@
 @defattr me/cmd_drd_stop
 @defattr me/dotherobot
 @defattr me/cmd_bridge
-@defattr me/set
+@defattr me/cmd_workbench
 @defattr me/cmd_safe
-@set me=Channel:public _ocu bot timestamp
-@set me=Color:2
-@set me=Rlname:Jason Hill
-@set me=Email:qbfreak@qbfreak.net
-@set me=Lastfrom:localhost
-@set me=Whoflags:Name Alias Online Idle G Class Flags Where Doing Hostname Poll Single
-@set me=Cname:8:2,6:2,15:3
+@defattr me/cmd_break
+@defattr me/tr_respclaimid
+@defattr me/cmd_space
+@defattr me/cmd_yayme
+@defattr me/changebase=function
+@defattr me/changetobase10=function
+@defattr me/getremainder=function
+@defattr me/cmd_yay
+@defattr me/cmd_parents
+@defattr me/cmd_zone_params
+@defattr me/cmd_zone
+
+
+@set me=Aconnect:unidle;@pemit me=[ansi(6,You disconnected at)] [ansi(14,timefmt(H:i P,lastoff(me)))] [ansi(6,on)] [ansi(14,timefmt({W, F d, Y},lastoff(me)))][ansi(6,.)];@echo #$# TAB chat [ansi(y+,{[info] chat tab configured.})]
+@set me=Alias:qb
+@set me=Caption:the tech
+@set me=Channel:public cpu code _space _bot _ocu timestamp +
+@set me=Cname:x+:2,c:2,w+:3
+@set me=Color:gh
+@set me=comtitles:c~ID#10-T r+~Error:~Pip~overflow y+~=/\= x+~[+]
 @set me=Desc:A generic looking tech in a work suit. Tools hang from his belt and he is busy typing into a datapad while mumbling to himself.
 @set me=Doing:Building a universe
+@set me=Email:qbfreak@qbfreak.net
+@@set me=Lastfrom:jason@localhost
 @set me=Notify:all
-@set me=Comtitle:[ansi(11,{[+] CSLtd})]
-@set me=cmd_limbo:$limbo:@tel me=#0
-@set me=cmd_lab:$lab:@tel me=#14
-@set me=cmd_loopback:$loopback:@tel me=#23
-@set me=cmd_parenthome:$phome *:@link %0=#16;@tel %0=#16
+@set me=Plan:Code, lots and lots of code.
+@set me=Rlname:Jason Hill
+@set me=Whoflags:Name Alias Online Idle G Class Flags Where Doing Hostname Poll Single
+
+@set me=Va:$cat:@echo Plane [comma(setr(2,get(cat,get_plane)))]: [setq(1,0)][foreach(get(cat,catattrs),[setq(1,add(v(1),wcount(get(cat,v(0)))))])][comma(v(1))] planets ([round(fdiv(v(2),v(1)),2)]%%%%) sector [[planetox(v(2))].[planetoy(v(2))].[planetoz(v(2))]]
+@set me=Vb:$rover:@echo %rMin: [get(#259,low)]%rCur: [terrain_value(#259)] [ansi(terrain_color(#259),capstr(terrain_name(#259)))]%rMax: [get(#259,high)]%r[[planetox(plane(#259))].[planetoy(plane(#259))]] [get(#259,direction)]%r[comma(get(#259,steps))] steps
+@set me=Vc:$rover *:@set #259=direction:[v(0)];rover
+
+
 @set me=cmd_drd:$drd *:@fo #28=%0
-@set me=cmd_drd_enable:$drdon:@set #28=Puppet
 @set me=cmd_drd_disable:$drdoff:@set #28=!Puppet
-@set me=cmd_drd_where:$drdwhere:@echo [unparse(loc(#28))][switch(hasflag(#28,w),1,: is wandering)]
-@set me=cmd_drd_wander:$drdwander:@set #28=wander
+@set me=cmd_drd_enable:$drdon:@set #28=Puppet
 @set me=cmd_drd_stop:$drdstop:@set #28=!wander
-@set me=dotherobot:+com [v(0)]=:does the robot
-@set me=Alias:qb
+@set me=cmd_drd_wander:$drdwander:@set #28=wander
+#@set me=cmd_drd_where:$drdwhere:@echo [unparse(#28)] is [switch(hasflag(#28,w),1,{wandering })]in [unparse(loc(#28))][if(wmatch(parents(loc(#28)),#29),ansi(s(get(loc(#28),color)),\[[sectordisplay(#28)]\]))]
+#@set me=cmd_drd_where:$drdwhere:@echo [unparse(loc(#28))][switch(hasflag(#28,w),1,: is wandering)]
+
+@set me=cmd_break:$break *:@tel me=[link(v(0))]
 @set me=cmd_bridge:$bridge:@tel #51:0
-@set me=set:@echo [v(0)]-[v(1)]
+@@set me=cmd_bot:@@
+@@set me=cmd_bot_long:@@
+@set me=cmd_lab:$lab:@tel me=#14:0
+@set me=cmd_limbo:$limbo:@tel me=#0
+@set me=cmd_loopback:$loopback:@tel me=#23
+@set me=cmd_parenthome:$phome *:@link %0=#16;@set %0=haven;@tel %0=#16
+@set me=cmd_parents:$parents *:@foreach [parents_r(v(0))]=@echo \[unparse(v(0))]
 @set me=cmd_safe:$safe:@tel me=#16:0
+@set me=cmd_space:$space:@tel #26:499499499
+@set me=cmd_workbench:$wb *:@link %0=#16;@tel %0=#101
+@set me=cmd_yayme:$yayme:@tel [first(lcon(#158))]=me
+@set me=cmd_yay:$yay:@iter *(#*) created.={@create [rest(upfront(),#)]},{@tel #\[v(0)]=#158}
+@set me=cmd_zone:$zone:@echo [unparse(zone(here))]
+@set me=cmd_zone_params:$zone *:@echo [unparse(zone(v(0)))]
+
+@set me=tr_respclaimid:@echo You just received claim ID [ansi(w+,v(0))]
+
+@@set me=changebase:10=[changetobase10(v(0),v(1))] [v(2)]=[getremainder(changetobase10(v(0),v(1)))]
+@@set me=changetobase10:[setq(2,v(0))][setq(3,0)][foreach(lnum(strlen(v(2))),[setq(3,add(v(3),mul(mid(v(2),v(0),1),pow(v(1),sub(dec(strlen(v(2))),v(0))))))])][v(3)]
+@set me=func:[setq(2,trim(edit(v(0),{,},{ }),,'))][setq(4,foreach(lnum(wcount(v(2))),[setq(3,extract(v(2),inc(v(0)),1))][ifelse(land(wmatch(cwho(v(1)),pnum(v(3))),hasflag(pnum(v(3)),c)),s([cname(pnum(v(3))][if(neq(inc(v(0)),wcount(v(2))),{,})]),s([ifelse(isdbref(num(v(3))),cname(v(3)),v(3))][if(neq(inc(v(0)),wcount(v(2))),{,})]))]))][if(strlen(v(4)),s([ansi(strcat(get(v(#),color),+),{[to})] [v(4)][ansi(strcat(get(v(#),color),+),{]})]))]
+@@set me=getremainder:[ifelse(div(v(0),v(1)),strcat(getremainder(div(v(0),v(1)),v(1)),mod(v(0),v(1))),mod(v(0),v(1)))]
+
+@set me=dotherobot:+com [v(0)]=:does the robot
