@@ -1,5 +1,7 @@
 @@ Station Control Console Parent v1.0
 
+@addparent2 Station Control Console=Multi-Dimension Coordinate System Parent
+
 @set Station Control Console Parent=Haven
 @set Station Control Console Parent=Color:[colorword(name(me))]
 @set Station Control Console Parent=Cname:[colorwordcname(name(me))]
@@ -25,6 +27,7 @@
     Control Console for [cname(get_stationid())]%r
      * Station: [unparse(get_stationid())]%r
      * Space:   [ifelse(isdbref(get_spaceid()),unparse(get_spaceid()),ansi(r+,is UNCONFIGURED))]%r
+     * Sector:  [ifelse(isdbref(get_stationid()),setunion(xyz3d(plane(get_stationid())),,{ },.),ansi(y+,is UNKNOWN))]%r
      * Zone:    [ifelse(isdbref(get_zoneid()),unparse(get_zoneid()),ansi(r+,is UNCONFIGURED))][if(truth(strlen(get_apzones())),foreach(get_apzones(),%r
      [spc(2)] * [unparse(v(0))])
      )]
