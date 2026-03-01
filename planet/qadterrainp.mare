@@ -4,8 +4,6 @@
 
 @set Quick and Dirty 2D Terrain Parent=haven
 
-@addparent2 Quick and Dirty 2D Terrain Parent=2D Coordinate System Parent
-
 @set Quick and Dirty 2D Terrain Parent=color:[extract(v(terrain_colormap),terrain_generate(plane(v(#))),1)]
 @set Quick and Dirty 2D Terrain Parent=desc:[capstr(edit(extract(v(terrain_names),terrain_generate(plane(v(#))),1),~,{ }))]
 

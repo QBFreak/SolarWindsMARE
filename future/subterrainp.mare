@@ -3,7 +3,7 @@
 
 @set 2D Subterranean Parent=haven
 
-@addparent2 2D Subterranean Parent=2D Coordinate System Parent
+@addparent2 2D Subterranean Parent=Multi-Dimension Coordinate System Parent
 
 
 @@ Settings @@
@@ -47,7 +47,7 @@
 @@  Return the value of the terrain for the coords at the invoker's current
 @@  location (or the coords at the specified object's location). Value is in the
 @@  range 1-wcount(subterrain_names()) and is seeded based on subterrain_seed()
-@set 2D Subterranean Parent=subterrain_value:[setq(0,iftrue(v(0),v(#)))][inc(int(fmul(fdiv(fadd(noise3(planetox(plane(v(0))),planetoy(plane(v(0))),subterrain_seed()),1),2),wcount(subterrain_colormap()))))]
+@set 2D Subterranean Parent=subterrain_value:[setq(0,iftrue(v(0),v(#)))][inc(int(fmul(fdiv(fadd(noise3(x2d(plane(v(0))),y2d(plane(v(0))),subterrain_seed()),1),2),wcount(subterrain_colormap()))))]
 
 @@ subterrain_color([object])
 @@  Return the color value of the subterrain for the coords at the invoker's
@@ -72,3 +72,4 @@
 @@  invoker's current location (or the coords at the specified object's
 @@  location).
 @set 2D Subterranean Parent=subterrain_amount:[setq(0,iftrue(v(0),v(#)))][srand(255,add(room(v(0)),div(plane(v(0)),10000)),mod(plane(v(0)),10000))]
+@echo ansi(y+,{WARNING: subterrain_amount has some suspicious hard-coded values})

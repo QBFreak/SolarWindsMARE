@@ -5,11 +5,6 @@
 @set Planet Function Parent=haven
 
 
-@@ Planar room support @@
-
-@addparent2 Planet Function Parent=2D Coordinate System Parent
-
-
 @@ Plane-based color functions @@
 
 @defattr Planet Function Parent/planet_room_color=inherit function

@@ -22,6 +22,7 @@
 
 @set Planet Parent=celestial_type:planet
 
+@emit [ansi(y+,{WARNING: tr_teldown and tr_configroom both use some ugly hard-coded values.})]
 @@ Plane 1073674629 = Location 0,0. It's ugly to hard code it, but it;
 @@  seemed like a bad idea to make the Planet Parent a child of the;
 @@  2D Coordinate System Parent, when it existed in 3D Space. This;
