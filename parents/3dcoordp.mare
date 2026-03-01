@@ -1,4 +1,5 @@
 @@ 3D Coordinate System Parent v1.0
+@@  solar/parents/3dcoordp
 
 @@ Planar coordinate encode/decode system @@
 @@ Works with coordinates from -499,-499,-499 to +499,+499,+499 for a volume of approx 1 billion sectors (rooms) per room
@@ -11,10 +12,24 @@
 @defattr 3D Coordinate System Parent/planetox=inherit function
 @defattr 3D Coordinate System Parent/planetoy=inherit function
 @defattr 3D Coordinate System Parent/planetoz=inherit function
+@defattr 3D Coordinate System Parent/planetoxyz=inherit function
+
+@defattr 3D Coordinate System Parent/getobjplane=inherit function
+@defattr 3D Coordinate System Parent/getobjx=inherit function
+@defattr 3D Coordinate System Parent/getobjy=inherit function
+@defattr 3D Coordinate System Parent/getobjz=inherit function
+@defattr 3D Coordinate System Parent/getobjxyz=inherit function
 
 @set 3D Coordinate System Parent=planetoz:[range(sub(div(v(0),1000000),499),-499,499)]
 @set 3D Coordinate System Parent=planetoy:[range(sub(div(mod(v(0),1000000),1000),499),-499,499)]
 @set 3D Coordinate System Parent=planetox:[range(sub(mod(mod(v(0),1000000),1000),499),-499,499)]
+@set 3D Coordinate System Parent=planetoxyz:[planetox(v(0))] [planetoy(v(0))] [planetoz(v(0))]
+
+@set 3D Coordinate System Parent=getobjplane:[plane(s_as([num(v(0))],v(!),v(#))]
+@set 3D Coordinate System Parent=getobjx:[planetox(getobjplane(v(0)))]
+@set 3D Coordinate System Parent=getobjy:[planetoy(getobjplane(v(0)))]
+@set 3D Coordinate System Parent=getobjz:[planetoz(getobjplane(v(0)))]
+@set 3D Coordinate System Parent=getobjxyz:[planetoxyz(getobjplane(v(0)))]
 
 @defattr 3D Coordinate System Parent/comdelay=inherit function
-@set 3D Coordinate System Parent=comdelay:[ifelse(land(isnum(v(0)),land(isnum(v(1)),isnum(v(2)))),mul(ceil(dist3d(planetox(plane(v(#))),planetoy(plane(v(#))),planetoz(plane(v(#))),v(0),v(1),v(2))),2),#-1)]
+@set 3D Coordinate System Parent=comdelay:[ifelse(land(isnum(v(0)),land(isnum(v(1)),isnum(v(2)))),mul(ceil(dist3d(getobjx(v(#)),getobjy(v(#)),getobjz(v(#)),v(0),v(1),v(2))),2),#-1)]

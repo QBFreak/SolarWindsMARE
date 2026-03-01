@@ -4,7 +4,7 @@
 @set #10=Universal
 @set #10=Color:6
 @set #10=Caption:is for admin commands
-@set #10=Desc:This UZO contains commands for admins. Care should be taken to lock commands appropriately with haspow() or rank(). It has the following commands defined:[foreach(matchall(lattrdef(me),cmd_*),%r * [extract(lattrdef(me),v(0),1)])]
+@set #10=Desc:This UZO contains commands for admins. Care should be taken to lock commands appropriately with haspow() or rank(). It has the following commands defined:%r[show_commands()]
 
 @set #10=Ulock:[gt(rank(v(#)),3)]
 
@@ -44,6 +44,31 @@
 				};
 			};
 		};
+	};
+.
+#mupdate off
+@defattr #10/cmd_setzone
+@defattr #10/help_setzone
+@set #10=help_setzone:Usage: @setzone room=zone%rAdd a zone to the current room, and remove all other zones from it.
+#mupdate on
+@@ DANGER: This needs to '@fo %#=' the zone changes instead of performing them itself;
+@set #10=cmd_setzone:$@setzone *=*:
+	@switch [isdbref(s_as([num(secure(v(0)))],v(#),v(#)))]=0,{
+		@pemit %#=I couldn't find '[secure(v(0))]' here.;
+	},{
+        @switch [isdbref(s_as([num(secure(v(1)))],v(#),v(#)))]=0,{
+            @pemit %#=I couldn't find '[secure(v(1))]' here.;
+        },{
+            @@ Should have checked that v(1) is a zone...;
+            @@pemit %#=[s_as([num(secure(v(0)))],v(#),v(#))];
+            @foreach [zone(s_as([num(secure(v(0)))],v(#),v(#)))]=
+                @switch \\\\\\\[match(v(0),s([secure(v(1))]))]=0,{
+                    @pemit %#=Removing zone \\\\\\\[unparse(v(0))] from [unparse(s_as([num(secure(v(0)))],v(#),v(#)))];
+                    @delzone [s_as([num(secure(v(0)))],v(#),v(#))]=\\\\\\\[v(0)];
+                };
+        };
+        @pemit %#=Adding zone [unparse(secure(v(1)))] to [unparse(s_as([num(secure(v(0)))],v(#),v(#)))];
+        @addzone [s_as([num(secure(v(0)))],v(#),v(#))]=[secure(v(1))];
 	};
 .
 #mupdate off
