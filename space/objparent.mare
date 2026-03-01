@@ -1,0 +1,51 @@
+@@ Celestial Object Parent
+@@  solar/space/objparent
+@@   A replacement for Space Object Parent
+
+@@ SolarWindsMARE #29
+@@addparent Celestial Object Parent=3D Coordinate System Parent
+@@ comdelay(x, y, z)=int
+@@ enccoord(x, y, z)=plane
+@@ getobjplane(name)=plane
+@@ getobjx(name)=int
+@@ getobjy(name)=int
+@@ getobjz(name)=int
+@@ getobjxyz(name)=int int int
+@@ planetox(plane)=int
+@@ planetoy(plane)=int
+@@ planetoz(plane)=int
+@@ planetoxyz(plane)=int int int
+
+@@ SolarWindsMARE #114
+@@addparent Celestial Object Parent=Sector Parent
+@@ sectorcolor(number)=color
+@@ sectorcolors()=list of colors
+@@ sectordisplay(obj)=string
+
+@set Celestial Object Parent=Caption:[sectordisplay(v(#))] ([plane(v(#))])
+
+@defattr Celestial Object Parent/noiseoffset=function inherit
+@set Celestial Object Parent=noiseoffset:[fadd(v(0),0.1)]
+
+@defattr Celestial Object Parent/frequency=function inherit
+@set Celestial Object Parent=frequency:1
+
+@@ The seed we use for srand() is created with the addition of (noise3() * 100) and a value unique to the object (the numeric portion of it's dbref)
+@@  The unique value can be overridden for instances where multiple objects need to produce the same distribution
+@defattr Celestial Object Parent/unique=function inherit
+@set Celestial Object Parent=unique:[rest(num(me),#)]
+
+@defattr Celestial Object Parent/seed=function inherit
+@set Celestial Object Parent=seed:[add(fmul(noise3(noiseoffset(getobjx(v(#))),noiseoffset(getobjy(v(#))),noiseoffset(getobjz(v(#)))),100),rest(num(me),#))]
+
+@@ Any positive value evaluates to true. This lets us increase the value of frequency() to make the object more common
+
+@set Celestial Object Parent=Vlock:[lor(eq(plane(v(#)),-1),srand(min(2,add(frequency(),1)),seed(),0))]
+
+@defattr Celestial Object Parent/eval_vlock=function inherit
+@set Celestial Object Parent=eval_vlock:[parse_lock(v(#),num(me),v(vlock))]
+
+@@ Prevent the parent desc from displaying on the child (assuming the child has a blank desc)
+@defattr Celestial Object Parent/desc_parent=function
+@set Celestial Object Parent=Desc_Parent:This parent provides procedural visibility for objects in planer space.
+@set Celestial Object Parent=Desc:[if(hasflag(me, haven),desc_parent())]
