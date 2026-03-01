@@ -3,7 +3,7 @@
 @@   A replacement for Space Object Parent
 
 @@ SolarWindsMARE #29
-@@addparent Celestial Object Parent=3D Coordinate System Parent
+@addparent2 Celestial Object Parent=Multi-Dimension Coordinate System Parent
 @@ comdelay(x, y, z)=int
 @@ enccoord(x, y, z)=plane
 @@ getobjplane(name)=plane
@@ -17,7 +17,7 @@
 @@ planetoxyz(plane)=int int int
 
 @@ SolarWindsMARE #114
-@@addparent Celestial Object Parent=Sector Parent
+@addparent2 Celestial Object Parent=Sector Parent
 @@ sectorcolor(number)=color
 @@ sectorcolors()=list of colors
 @@ sectordisplay(obj)=string
@@ -49,3 +49,14 @@
 @defattr Celestial Object Parent/desc_parent=function
 @set Celestial Object Parent=Desc_Parent:This parent provides procedural visibility for objects in planer space.
 @set Celestial Object Parent=Desc:[if(hasflag(me, haven),desc_parent())]
+
+@defattr Celestial Object Parent/getobjplane=inherit function
+@defattr Celestial Object Parent/getobjx=inherit function
+@defattr Celestial Object Parent/getobjy=inherit function
+@defattr Celestial Object Parent/getobjz=inherit function
+@defattr Celestial Object Parent/getobjxyz=inherit function
+@set Celestial Object Parent=getobjplane:[plane(s_as([num(v(0))],v(!),v(#))]
+@set Celestial Object Parent=getobjx:[x3d(getobjplane(v(0)))]
+@set Celestial Object Parent=getobjy:[y3d(getobjplane(v(0)))]
+@set Celestial Object Parent=getobjz:[z3d(getobjplane(v(0)))]
+@set Celestial Object Parent=getobjxyz:[xyz3d(getobjplane(v(0)))]

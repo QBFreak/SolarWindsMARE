@@ -1,6 +1,6 @@
 @@ Ship Parent v1.0
 
-@@addparent Ship Parent=System Function Parent
+@addparent2 Ship Parent=Multi-Dimension Coordinate System Parent
 
 @set Ship Parent=Color:[colorword(name(me))]
 @set Ship Parent=Cname:[colorwordcname(name(me))]

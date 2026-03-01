@@ -1,0 +1,12 @@
+@@ Sector Zone Parent v1.0
+@@  solar/space/sectorzone
+
+@set Sector Zone Parent=haven
+@@addparent Sector Zone Parent=System Function Parent
+@addparent2 Sector Zone Parent=Multi-Dimension Coordinate System Parent
+
+@@ When someone leaves, reset their plane to 0
+@set Sector zone Parent=Aleave:@plane %#=0
+
+@defattr Sector Zone Parent/cmd_warp=inherit
+@set Sector Zone Parent=Cmd_warp:$warp *.*.*:/[haspow(owner(v(#)),teleport)]/@tel %#=[loc(v(#))]:[plane3d(v(0),v(1),v(2))]

@@ -1,6 +1,7 @@
 @@ Navigation Console Parent v1.0
+@@  solar/ship/ncp
 
-@addparent NCParent=System Function Parent
+@addparent2 NCParent=Multi-Dimension Coordinate System Parent
 
 @set NCParent=Color:12
 

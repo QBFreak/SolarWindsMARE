@@ -1,14 +1,16 @@
 @@ Sector Parent v1.0
+@@  solar/space/sector
 @@  Is this the former System Function Parent?
 
-@addparent2 Sector Parent=3D Coordinate System Parent
+@addparent2 Sector Parent=Multi-Dimension Coordinate System Parent
+@@addparent2 Sector Parent=3D Coordinate System Parent
 
 @set Sector Parent=color:[sectorcolor(createtime(me))]
 @set Sector Parent=cname:[sectorcolor(div(createtime(me),2))]
 @set Sector Parent=caption:sector [sectordisplay(v(#))]
 
 @defattr Sector Parent/sectordisplay=inherit function
-@set Sector Parent=sectordisplay:[planetox(plane(v(0)))].[planetoy(plane(v(0)))].[planetoz(plane(v(0)))]
+@set Sector Parent=sectordisplay:[x3d(plane(v(0)))].[y3d(plane(v(0)))].[z3d(plane(v(0)))]
 
 @defattr Sector Parent/sectorcolors=inherit function
 @set Sector Parent=sectorcolors:4 12 14 1 2 3 5 6 7 15

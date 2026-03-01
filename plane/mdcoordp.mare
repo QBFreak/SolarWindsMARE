@@ -1,0 +1,80 @@
+@@ Multi-Dimension Coordinate System Parent v1.0
+@@  solar/plane/mdcoordp
+
+@@ Planar coordinate encode/decode system for 2D and 3D spaces @@
+@@      Why magic numbers? Because there is a limit on how many functions a user can run at once
+@@      The root is of the maximum plane number, this ignores negative planes, which lets us avoid working around planes -1, and 0
+
+@@ Magic numbers:
+@@		+2,147,483,647	Maximum plane value
+@@		-2,147,483,648	Minimum plane value
+
+@@ Magic numbers 2D:
+@@ Works with coordinates from -23,169.-23,169 to +23,169.+23,169 for an area of 2,147,395,600 planar rooms per actual room
+@@	    46,340	Square root (rounded down to decimal) of max plane
+@@		23,169	Above halved, decremented, such that we can use it as an offset and still fall within our root
+@@
+
+@@ Magic numbers 3D:
+@@ Works with coordinates from -1,290.-1,290,-1,290 to +1,290.+1,290.+1,290 for an area of 2,146,689,000 planar rooms per actual room
+@@		1,290	Cube root (rounded down to decimal) of max plane
+@@		  644	Above halved, decremented, such that we can use it as an offset and still fall within our root
+
+@@ round(pow(32768,fdiv(1,3)))
+
+@defattr Multi-Dimension Coordinate System Parent/max_plane=function inherit
+@set Multi-Dimension Coordinate System Parent=max_plane:2147483647
+
+@defattr Multi-Dimension Coordinate System Parent/min_plane=function inherit
+@set Multi-Dimension Coordinate System Parent=min_plane:-2147483647
+
+@@  2D functions @@
+
+@@ How many locations on the side of a 2d square, if we distribute them among the maximum plane number?
+@@      @emit dim_size_2d=[floor(sqrt(max_plane()))]
+@defattr Multi-Dimension Coordinate System Parent/dim_size_2d=function inherit
+@set Multi-Dimension Coordinate System Parent=dim_size_2d:46340
+
+@@ How many locations on a single side, above 0? (this number is the maximum value of a single axis, it's negative is the minimum value)
+@@      @emit dim_offset_2d=[dec(div(dim_size_2d(),2))]
+@defattr Multi-Dimension Coordinate System Parent/dim_offset_2d=function inherit
+@set Multi-Dimension Coordinate System Parent=dim_offset_2d:23169
+
+@@ plane2d(int, int)=plane
+@@  Encode a set of 2d coordinates into a plane number
+@defattr Multi-Dimension Coordinate System Parent/plane2d=inherit function
+@set Multi-Dimension Coordinate System Parent=plane2d:[add(add(range(v(0),neg(dim_offset_2d()),dim_offset_2d()),dim_offset_2d()),mul(add(range(v(1),neg(dim_offset_2d()),dim_offset_2d()),dim_offset_2d()),dim_size_2d()))]
+
+@defattr Multi-Dimension Coordinate System Parent/x2d=inherit function
+@defattr Multi-Dimension Coordinate System Parent/y2d=inherit function
+@defattr Multi-Dimension Coordinate System Parent/xy2d=inherit function
+
+@set Multi-Dimension Coordinate System Parent=x2d:[range(sub(mod(mod(v(0),mul(dim_size_2d(),dim_size_2d())),dim_size_2d()),dim_offset_2d()),neg(dim_offset_2d()),dim_offset_2d())]
+@set Multi-Dimension Coordinate System Parent=y2d:[range(sub(div(mod(v(0),mul(dim_size_2d(),dim_size_2d())),dim_size_2d()),dim_offset_2d()),neg(dim_offset_2d()),dim_offset_2d())]
+@set Multi-Dimension Coordinate System Parent=xy2d:[x2d(v(0))] [y2d(v(0))]
+
+
+@@  3D functions @@
+
+@@ How many locations on the side of a 2d square, if we distribute them among the maximum plane number?
+@defattr Multi-Dimension Coordinate System Parent/dim_size_3d=function inherit
+@set Multi-Dimension Coordinate System Parent=dim_size_3d:1290
+
+@@ How many locations on a single side, above 0? (this number is the maximum value of a single axis, it's negative is the minimum value)
+@defattr Multi-Dimension Coordinate System Parent/dim_offset_3d=function inherit
+@set Multi-Dimension Coordinate System Parent=dim_offset_3d:644
+
+@@ plane3d(int, int, int)=plane
+@@  Encode a set of 3d coordinates into a plane number
+@defattr Multi-Dimension Coordinate System Parent/plane3d=inherit function
+@set Multi-Dimension Coordinate System Parent=plane3d:[add(add(mul(add(range(v(2),neg(dim_offset_3d()),dim_offset_3d()),dim_offset_3d()),mul(dim_size_3d(),dim_size_3d())),mul(add(range(v(1),neg(dim_offset_3d()),dim_offset_3d()),dim_offset_3d()),dim_size_3d())),add(range(v(0),neg(dim_offset_3d()),dim_offset_3d()),dim_offset_3d()))]
+
+@defattr Multi-Dimension Coordinate System Parent/x3d=inherit function
+@defattr Multi-Dimension Coordinate System Parent/y3d=inherit function
+@defattr Multi-Dimension Coordinate System Parent/z3d=inherit function
+@defattr Multi-Dimension Coordinate System Parent/xyz3d=inherit function
+
+@set Multi-Dimension Coordinate System Parent=x3d:[range(sub(mod(mod(v(0),mul(dim_size_3d(),dim_size_3d())),dim_size_3d()),dim_offset_3d()),neg(dim_offset_3d()),dim_offset_3d())]
+@set Multi-Dimension Coordinate System Parent=y3d:[range(sub(div(mod(v(0),mul(dim_size_3d(),dim_size_3d())),dim_size_3d()),dim_offset_3d()),neg(dim_offset_3d()),dim_offset_3d())]
+@set Multi-Dimension Coordinate System Parent=z3d:[range(sub(div(v(0),mul(dim_size_3d(),dim_size_3d())),dim_offset_3d()),neg(dim_offset_3d()),dim_offset_3d())]
+@set Multi-Dimension Coordinate System Parent=xyz3d:[x3d(v(0))] [y3d(v(0))] [z3d(v(0))]
