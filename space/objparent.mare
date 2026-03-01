@@ -4,17 +4,6 @@
 
 @@ SolarWindsMARE #29
 @addparent2 Celestial Object Parent=Multi-Dimension Coordinate System Parent
-@@ comdelay(x, y, z)=int
-@@ enccoord(x, y, z)=plane
-@@ getobjplane(name)=plane
-@@ getobjx(name)=int
-@@ getobjy(name)=int
-@@ getobjz(name)=int
-@@ getobjxyz(name)=int int int
-@@ planetox(plane)=int
-@@ planetoy(plane)=int
-@@ planetoz(plane)=int
-@@ planetoxyz(plane)=int int int
 
 @@ SolarWindsMARE #114
 @addparent2 Celestial Object Parent=Sector Parent
