@@ -4,6 +4,7 @@
 
 @@ SolarWindsMARE #29
 @addparent2 Celestial Object Parent=Multi-Dimension Coordinate System Parent
+@addparent2 Celestial Object Parent=Celestial Type Parent
 
 @@ SolarWindsMARE #114
 @addparent2 Celestial Object Parent=Sector Parent
@@ -11,7 +12,11 @@
 @@ sectorcolors()=list of colors
 @@ sectordisplay(obj)=string
 
-@set Celestial Object Parent=Caption:[sectordisplay(v(#))] ([plane(v(#))])
+@@set Celestial Object Parent=Caption:[sectordisplay(v(#))] ([plane(v(#))])
+@set Celestial Object Parent=Caption:[get_type_name()]
+@set Celestial Object Parent=Color:[get_type_color()]
+@set Celestial Object Parent=Cname:[get_type_color()]
+@set Celestial Object Parent=lock:#0
 
 @defattr Celestial Object Parent/noiseoffset=function inherit
 @set Celestial Object Parent=noiseoffset:[fadd(v(0),0.1)]
@@ -27,9 +32,12 @@
 @defattr Celestial Object Parent/seed=function inherit
 @set Celestial Object Parent=seed:[add(fmul(noise3(noiseoffset(getobjx(v(#))),noiseoffset(getobjy(v(#))),noiseoffset(getobjz(v(#)))),100),rest(num(me),#))]
 
+@defattr Celestial Object Parent/get_srand=function inherit
+@set Celestial Object Parent=get_srand:[srand(min(2,add(frequency(),1)),seed(),0)]
+
 @@ Any positive value evaluates to true. This lets us increase the value of frequency() to make the object more common
 
-@set Celestial Object Parent=Vlock:[lor(eq(plane(v(#)),-1),srand(min(2,add(frequency(),1)),seed(),0))]
+@set Celestial Object Parent=Vlock:[lor(eq(plane(v(#)),-1),get_srand())]
 
 @defattr Celestial Object Parent/eval_vlock=function inherit
 @set Celestial Object Parent=eval_vlock:[parse_lock(v(#),num(me),v(vlock))]
@@ -49,3 +57,36 @@
 @set Celestial Object Parent=getobjy:[y3d(getobjplane(v(0)))]
 @set Celestial Object Parent=getobjz:[z3d(getobjplane(v(0)))]
 @set Celestial Object Parent=getobjxyz:[xyz3d(getobjplane(v(0)))]
+
+@@ These three functions exist so that we can override them and duplicate things in a test system
+@defattr Celestial Object Parent/get_loc=inherit function
+@defattr Celestial Object Parent/get_plane=inherit function
+@defattr Celestial Object Parent/get_num=inherit function
+@set Celestial Object Parent=get_loc:[loc(me)]
+@set Celestial Object Parent=get_plane:[plane(v(#))]
+@set Celestial Object Parent=get_num:[num(me)]
+
+@@ Takes the seed and turns it into a number from 1 to v(0), for indexing lists
+@defattr Celestial Object Parent/seed_index=function inherit
+@set Celestial Object Parent=seed_index:[setq(1,max(v(0),1))][inc(mod(seed(),v(1)))]
+
+@@ Extract an item from the list in v(0), based on the seed
+@defattr Celestial Object Parent/seed_extract=function inherit
+@set Celestial Object Parent=seed_extract:[extract(v(0),seed_index(wcount(v(0))),1)]
+
+@defattr Celestial Object Parent/get_seeded_index=function inherit
+@set Celestial Object Parent=get_seeded_index:[index_chance(srand(max(2,total_frequencies()),seed(),0))]
+
+@defattr Celestial Object Parent/get_type_data=function inherit
+@defattr Celestial Object Parent/get_type_name=function inherit
+@defattr Celestial Object Parent/get_type_frequency=function inherit
+@defattr Celestial Object Parent/get_type_color=function inherit
+
+@@set Celestial Object Parent=get_type_data:[extract_type_data(seed_index(wcount(types(),record_delim())))]
+@@set Celestial Object Parent=get_type_name:[extract_type_name(seed_index(wcount(types(),record_delim())))]
+@@set Celestial Object Parent=get_type_frequency:[extract_type_frequency(seed_index(wcount(types(),record_delim())))]
+@@set Celestial Object Parent=get_type_color:[extract_type_color(seed_index(wcount(types(),record_delim())))]
+@set Celestial Object Parent=get_type_data:[extract_type_data(get_seeded_index())]
+@set Celestial Object Parent=get_type_name:[extract_type_name(get_seeded_index())]
+@set Celestial Object Parent=get_type_frequency:[extract_type_frequency(get_seeded_index())]
+@set Celestial Object Parent=get_type_color:[extract_type_color(get_seeded_index())]
