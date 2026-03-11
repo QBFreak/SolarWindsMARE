@@ -30,7 +30,7 @@
 @set Celestial Object Parent=unique:[rest(num(me),#)]
 
 @defattr Celestial Object Parent/seed=function inherit
-@set Celestial Object Parent=seed:[add(fmul(noise3(noiseoffset(getobjx(v(#))),noiseoffset(getobjy(v(#))),noiseoffset(getobjz(v(#)))),100),rest(num(me),#))]
+@set Celestial Object Parent=seed:[add(fmul(noise3(noiseoffset(getobjx(v(#))),noiseoffset(getobjy(v(#))),noiseoffset(getobjz(v(#)))),100),unique())]
 
 @defattr Celestial Object Parent/get_srand=function inherit
 @set Celestial Object Parent=get_srand:[srand(min(2,add(frequency(),1)),seed(),0)]
