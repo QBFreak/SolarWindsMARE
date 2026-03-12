@@ -14,10 +14,18 @@
 @set Planetary Nuke=ulock:[eq(rank(v(#)),5)]
 @set Planetary Nuke=ufail:Thank goodness, you don't have the authority to wield such a weapon.
 
-@defattr Planetary Nuke/roomidattr=function
+@@undefattr Planetary Nuke/roomidattr
+@@defattr Planetary Nuke/roomidattr=function
+@@set Planetary Nuke=roomidattr:[strcat(roomid_,plane(v(#)))]
+
 @defattr Planetary Nuke/roomid=function
-@set Planetary Nuke=roomidattr:[strcat(roomid_,plane(v(#)))]
-@set Planetary Nuke=roomid:[get(v(0),roomidattr())]
+@set Planetary Nuke=roomid:[sql(s(SELECT destination FROM enterable_space_objects WHERE plane=[plane(v(#))] AND source="[num(v(0))]"))]
+@@set Planetary Nuke=roomid:[get(v(0),roomidattr())]
+
+@defattr Planetary Nuke/planet_parent_id=function
+@set Planetary Nuke=planet_parent_id:#125
+@@ Use @force to delay the @echo to ensure the previous @set has taken effect
+@fo me=@echo [ansi(y+, WARNING:)] Ensure id of planet parent is correct: [unparse(get(Planetary Nuke,planet_parent_id))]
 
 @defattr Planetary Nuke/get_zone=function
 @defattr Planetary Nuke/get_rooms=function
@@ -37,11 +45,14 @@
 		@pemit %#=Usage: nuke <planet>;
 	},{
 		@switch [isdbref(num(v(0)))]=1,{
-			@switch [truth(wmatch(lattrdef(v(0)),roomidattr()))]=1,{
+			@switch [truth(wmatch(parents(v(0)),planet_parent_id()))]=1,{
 				@pemit %#=;
 				@pemit %#=[ansi(y+-,WARNING: You are about to destroy the following:)];
 				@pemit %#=[ansi(w+-,Zone:)] [unparse(get_zone(v(0)))];
 				@pemit %#=[ansi(w+-,Rooms:)] [foreach(get_rooms(v(0)),[unparse(v(0))])];
+				@pemit %#=;
+				@pemit %#=[ansi(y+-,WARNING: You are about to remove the following database records:)];
+				@pemit %#=[ansi(w+-,enterable_space_objects:)] [sql(s(SELECT * FROM enterable_space_objects WHERE plane=[plane(v(#))] AND source="[num(v(0))]"))];
 				@pemit %#=;
 				@pemit %#=[unparse(owner(roomid(v(0))))] is probably going to be a little unhappy with you.;
 				@pemit %#=;
@@ -65,7 +76,8 @@
 			@destroy \\\[v(0)]=60;
 		};
 		@set me=nukeid:;
-		@undefattr [v(nukeid)]/[roomidattr()];
+		@@undefattr [v(nukeid)]/[roomidattr()];
+        @sql [s(DELETE FROM enterable_space_objects WHERE plane=[plane(v(#))] AND source="[v(nukeid)]")];
 		@pemit %#=Boom! It's all gone. Well, going. You have 60 seconds to @undestroy your mistake. May the gods have mercy on your soul.;
 	};
 .
