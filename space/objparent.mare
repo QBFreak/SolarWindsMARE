@@ -19,6 +19,11 @@
 @set Celestial Object Parent=Cname:[get_variant_color()]
 @set Celestial Object Parent=lock:#0
 
+@defattr Celestial Object Parent/log_chan=inherit function
+@defattr Celestial Object Parent/tr_log=inherit
+@set Celestial Object Parent=log_chan:_space
+@set Celestial Object Parent=tr_log:@cemit [log_chan()]=[unparse(v(0))] <[unparse(loc(v(0)))][if(wcount(v(1)),sectordisplay_plane(v(1)))]>: [v(2)]
+
 @defattr Celestial Object Parent/celestial_type=function inherit
 
 @defattr Celestial Object Parent/noiseoffset=function inherit
