@@ -9,8 +9,13 @@
 @set Sector Parent=cname:[sectorcolor(div(createtime(me),2))]
 @set Sector Parent=caption:sector [sectordisplay(v(#))]
 
+@@ Format the sector of <plane> for display
+@defattr Sector Parent/sectordisplay_plane=inherit function
+@set Sector Parent=sectordisplay_plane:[x3d(v(0))].[y3d(v(0))].[z3d(v(0))]
+
+@@ Format the sector of <obj> for display
 @defattr Sector Parent/sectordisplay=inherit function
-@set Sector Parent=sectordisplay:[x3d(plane(v(0)))].[y3d(plane(v(0)))].[z3d(plane(v(0)))]
+@set Sector Parent=sectordisplay:[sectordisplay_plane(plane(v(0)))]
 
 @defattr Sector Parent/sectorcolors=inherit function
 @set Sector Parent=sectorcolors:4 12 14 1 2 3 5 6 7 15
