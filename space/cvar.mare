@@ -1,95 +1,98 @@
-@@ Celestial Type Parent
-@@  solar/space/ctype
+@@ Celestial Variant Parent
+@@  solar/space/cvar
+@@      Manages the variants of a particular type of celestial body
+@@      ex: The type is Star, and the variant is Yellow Giant
 
-@set Celestial Type Parent=alias:types
-@set Celestial Type Parent=Ulock:[owner(me)]|[haspow(v(#),Wizattr)]|[hasflag(v(#),B)]
-@set Celestial Type Parent=Adesc:@tr me/cmd_list
-@set Celestial Type Parent=Desc:This parent provides the storage and management commands to maintain a list of Celestial Body types, their frequency, and their color.
+@set Celestial Variant Parent=alias:variants
+@set Celestial Variant Parent=Ulock:[owner(me)]|[haspow(v(#),Wizattr)]|[hasflag(v(#),B)]
+@set Celestial Variant Parent=Adesc:@tr me/cmd_list
+@set Celestial Variant Parent=Desc:This parent provides the storage and management commands to maintain a list of Celestial Body variants, their frequency, and their color.
 
-@defattr Celestial Type Parent/types=function inherit
+@defattr Celestial Variant Parent/variants=function inherit
 
-@defattr Celestial Type Parent/record_delim=function inherit
-@set Celestial Type Parent=record_delim:`
+@defattr Celestial Variant Parent/record_delim=function inherit
+@set Celestial Variant Parent=record_delim:`
 
-@defattr Celestial Type Parent/field_delim=function inherit
-@set Celestial Type Parent=field_delim:~
+@defattr Celestial Variant Parent/field_delim=function inherit
+@set Celestial Variant Parent=field_delim:~
 
-@@ Iterate over the records in types() and sum the frequency fields
-@defattr Celestial Type Parent/total_frequencies=function inherit
-@set Celestial Type Parent=total_frequencies:[add(edit(foreach(types(),[extract(v(0),2,1,field_delim())],record_delim()),record_delim(),{, }))]
+@@ Iterate over the records in variants() and sum the frequency fields
+@defattr Celestial Variant Parent/total_frequencies=function inherit
+@set Celestial Variant Parent=total_frequencies:[add(edit(foreach(variants(),[extract(v(0),2,1,field_delim())],record_delim()),record_delim(),{, }))]
 
-@@ The index of the record in types() that matches the random chance v(0)
-@defattr Celestial Type Parent/index_chance=function inherit
-@@set Celestial Type Parent=index_chance:[setq(1,v(0))][setq(2,0)][wmatch(foreach(types(),[setq(3,extract(v(0),2,1,field_delim()))][land(gteq(v(1),v(2)),lt(v(1),add(v(2),v(3))))][setq(2,add(v(2),v(3)))],record_delim()),1)]
-@set Celestial Type Parent=index_chance:[setq(1,v(0))][setq(2,0)][dec(wmatch(foreach(types(),[setq(3,extract(v(0),2,1,field_delim()))][land(gteq(v(1),v(2)),lt(v(1),add(v(2),v(3))))][setq(2,add(v(2),v(3)))]),1))]
+@@ The index of the record in variants() that matches the random chance v(0)
+@defattr Celestial Variant Parent/index_chance=function inherit
+@@set Celestial Variant Parent=index_chance:[setq(1,v(0))][setq(2,0)][wmatch(foreach(variants(),[setq(3,extract(v(0),2,1,field_delim()))][land(gteq(v(1),v(2)),lt(v(1),add(v(2),v(3))))][setq(2,add(v(2),v(3)))],record_delim()),1)]
+@@set Celestial Variant Parent=index_chance:[setq(1,v(0))][setq(2,0)][dec(wmatch(foreach(variants(),[setq(3,extract(v(0),2,1,field_delim()))][land(gteq(v(1),v(2)),lt(v(1),add(v(2),v(3))))][setq(2,add(v(2),v(3)))]),1))]
+@set Celestial Variant Parent=index_chance:[setq(1,v(0))][setq(2,0)][wmatch(foreach(variants(),[setq(3,extract(v(0),2,1,field_delim()))][land(gt(v(1),v(2)),lteq(v(1),add(v(2),v(3))))][setq(2,add(v(2),v(3)))],record_delim()),1,record_delim())]
 
-@@ Get the type data at index %0 from types()
-@defattr Celestial Type Parent/extract_type_data=function inherit
-@set Celestial Type Parent=extract_type_data:[extract(types(),v(0),1,record_delim())]
+@@ Get the variant data at index %0 from variants()
+@defattr Celestial Variant Parent/extract_variant_data=function inherit
+@set Celestial Variant Parent=extract_variant_data:[extract(variants(),v(0),1,record_delim())]
 
-@defattr Celestial Type Parent/extract_type_name=function inherit
-@set Celestial Type Parent=extract_type_name:[extract(extract_type_data(v(0)),1,1,field_delim())]
+@defattr Celestial Variant Parent/extract_variant_name=function inherit
+@set Celestial Variant Parent=extract_variant_name:[extract(extract_variant_data(v(0)),1,1,field_delim())]
 
-@defattr Celestial Type Parent/extract_type_frequency=function inherit
-@set Celestial Type Parent=extract_type_frequency:[extract(extract_type_data(v(0)),2,1,field_delim())]
+@defattr Celestial Variant Parent/extract_variant_frequency=function inherit
+@set Celestial Variant Parent=extract_variant_frequency:[extract(extract_variant_data(v(0)),2,1,field_delim())]
 
-@defattr Celestial Type Parent/extract_type_color=function inherit
-@set Celestial Type Parent=extract_type_color:[extract(extract_type_data(v(0)),3,1,field_delim())]
+@defattr Celestial Variant Parent/extract_variant_color=function inherit
+@set Celestial Variant Parent=extract_variant_color:[extract(extract_variant_data(v(0)),3,1,field_delim())]
 
-@defattr Celestial Type Parent/cmd_list=inherit
-@defattr Celestial Type Parent/cmd_add=inherit
-@defattr Celestial Type Parent/cmd_del=inherit
-@defattr Celestial Type Parent/cmd_edit=inherit
-@defattr Celestial Type Parent/cmd_zero=inherit
-@defattr Celestial Type Parent/tr_zero=inherit
+@defattr Celestial Variant Parent/cmd_list=inherit
+@defattr Celestial Variant Parent/cmd_add=inherit
+@defattr Celestial Variant Parent/cmd_del=inherit
+@defattr Celestial Variant Parent/cmd_edit=inherit
+@defattr Celestial Variant Parent/cmd_zero=inherit
+@defattr Celestial Variant Parent/tr_zero=inherit
 
 #mupdate on
-@set Celestial Type Parent=cmd_list:^list:
-    @switch [gt(wcount(types(),record_delim()),0)]=1,{
-        @pemit %#=ansi(u,{#   Freq   Type Name});
-        @foreach lnum(wcount(types(),`))=
-            @pemit %#=\\\[ljust(strcat(inc(v(0)),.),3)] \\\[ljust(extract_type_frequency(inc(v(0))),5)]  \\\[ansi(extract_type_color(inc(v(0))),extract_type_name(inc(v(0))))];
+@set Celestial Variant Parent=cmd_list:^list:
+    @switch [gt(wcount(variants(),record_delim()),0)]=1,{
+        @pemit %#=ansi(u,{#   Freq   Variant Name});
+        @foreach lnum(wcount(variants(),`))=
+            @pemit %#=\\\[ljust(strcat(inc(v(0)),.),3)] \\\[ljust(extract_variant_frequency(inc(v(0))),5)]  \\\[ansi(extract_variant_color(inc(v(0))),extract_variant_name(inc(v(0))))];
     },{
-        @pemit %#=There are currently no types defined.%rPerhaps you could add one with [ansi(g+,s(add [name(me)]=<frequency> <color> <type name>))];
+        @pemit %#=There are currently no variants defined.%rPerhaps you could add one with [ansi(g+,s(add [name(me)]=<frequency> <color> <variant name>))];
     };
 .
 
-@set Celestial Type Parent=cmd_add:^add:
+@set Celestial Variant Parent=cmd_add:^add:
     @switch [gteq(wcount(v(0)),3)]=1,{
-        @set me=types:[setunion(types(),s([extract(v(0),3,wcount(v(0)),)][field_delim()][first(v(0))][field_delim()][extract(v(0),2,1)]),record_delim())];
-        @pemit %#=Added [ansi(extract(v(0),2,1),extract(v(0),3,wcount(v(0))))] as number [inc(wcount(types(),record_delim()))];
+        @set me=variants:[setunion(variants(),s([extract(v(0),3,wcount(v(0)),)][field_delim()][first(v(0))][field_delim()][extract(v(0),2,1)]),record_delim())];
+        @pemit %#=Added [ansi(extract(v(0),2,1),extract(v(0),3,wcount(v(0))))] as number [inc(wcount(variants(),record_delim()))];
     },{
-        @pemit %#=Usage: add [name(me)]=<frequency> <color> <type name>;
+        @pemit %#=Usage: add [name(me)]=<frequency> <color> <variant name>;
     };
 .
 
-@set Celestial Type Parent=cmd_del:^del:
+@set Celestial Variant Parent=cmd_del:^del:
     @switch [land(eq(wcount(v(0)),1),isnum(v(0)))]=1,{
-        @pemit %#=Removed #[v(0)]: [ansi(extract_type_color(v(0)),extract_type_name(v(0)))];
-        @set me=types:[remove(types(),v(0),1,record_delim())];
+        @pemit %#=Removed #[v(0)]: [ansi(extract_variant_color(v(0)),extract_variant_name(v(0)))];
+        @set me=variants:[remove(variants(),v(0),1,record_delim())];
     },{
         @pemit %#=Usage: del [name(me)]=<number>;
     };
 .
 
-@set Celestial Type Parent=cmd_edit:^edit:
+@set Celestial Variant Parent=cmd_edit:^edit:
     @switch [land(gteq(wcount(v(0)),3),isnum(first(v(0))))]=1,{
-        @pemit %#=Replaced #[first(v(0))]: [ansi(extract_type_color(v(0)),extract_type_name(v(0)))] with [ansi(extract(v(0),3,1),extract(v(0),4,wcount(v(0))))];
-        @set me=types:[replace(types(),v(0),s([extract(v(0),4,wcount(v(0)),)][field_delim()][extract(v(0),2,1)][field_delim()][extract(v(0),3,1)]),record_delim())];
+        @pemit %#=Replaced #[first(v(0))]: [ansi(extract_variant_color(v(0)),extract_variant_name(v(0)))] with [ansi(extract(v(0),3,1),extract(v(0),4,wcount(v(0))))];
+        @set me=variants:[replace(variants(),v(0),s([extract(v(0),4,wcount(v(0)),)][field_delim()][extract(v(0),2,1)][field_delim()][extract(v(0),3,1)]),record_delim())];
     },{
-        @pemit %#=Usage: edit [name(me)]=<number> <frequency> <color> <type name>;
+        @pemit %#=Usage: edit [name(me)]=<number> <frequency> <color> <variant name>;
     };
 .
 
-@set Celestial Type Parent=cmd_zero:^zero:
-    @pemit %#=[ansi(y+,WARNING:)] You're about to remove all [wcount(types(),record_delim())] types from the list!;
+@set Celestial Variant Parent=cmd_zero:^zero:
+    @pemit %#=[ansi(y+,WARNING:)] You're about to remove all [wcount(variants(),record_delim())] variants from the list!;
     @input %#=me/tr_zero:{Enter [ansi(g+,yes)] to confirm, anything else to cancel:};
 .
 
-@set Celestial Type Parent=tr_zero:
+@set Celestial Variant Parent=tr_zero:
     @switch [match(v(0),YES)]=1,{
-        @set me=types:;
-        @pemit %#=Type list cleared!;
+        @set me=variants:;
+        @pemit %#=Variant list cleared!;
     },{
         @pemit %#=Action cancelled.;
     };

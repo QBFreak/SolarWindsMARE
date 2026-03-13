@@ -1,10 +1,11 @@
 @@ Celestial Object Parent
 @@  solar/space/objparent
 @@   A replacement for Space Object Parent
+@@      A parent of a specific type of object (Star, Planet, etc) in space.
 
 @@ SolarWindsMARE #29
 @addparent2 Celestial Object Parent=Multi-Dimension Coordinate System Parent
-@addparent2 Celestial Object Parent=Celestial Type Parent
+@addparent2 Celestial Object Parent=Celestial Variant Parent
 
 @@ SolarWindsMARE #114
 @addparent2 Celestial Object Parent=Sector Parent
@@ -13,10 +14,12 @@
 @@ sectordisplay(obj)=string
 
 @@set Celestial Object Parent=Caption:[sectordisplay(v(#))] ([plane(v(#))])
-@set Celestial Object Parent=Caption:[get_type_name()]
-@set Celestial Object Parent=Color:[get_type_color()]
-@set Celestial Object Parent=Cname:[get_type_color()]
+@set Celestial Object Parent=Caption:[get_variant_name()]
+@set Celestial Object Parent=Color:[get_variant_color()]
+@set Celestial Object Parent=Cname:[get_variant_color()]
 @set Celestial Object Parent=lock:#0
+
+@defattr Celestial Object Parent/celestial_type=function inherit
 
 @defattr Celestial Object Parent/noiseoffset=function inherit
 @set Celestial Object Parent=noiseoffset:[fadd(v(0),0.1)]
@@ -31,6 +34,7 @@
 
 @defattr Celestial Object Parent/seed=function inherit
 @set Celestial Object Parent=seed:[add(fmul(noise3(noiseoffset(getobjx(v(#))),noiseoffset(getobjy(v(#))),noiseoffset(getobjz(v(#)))),100),unique())]
+@@set Celestial Object Parent=seed:[add(fmul(noise3(noiseoffset(v(0)),noiseoffset(0),noiseoffset(0)),100),unique())]
 
 @defattr Celestial Object Parent/get_srand=function inherit
 @set Celestial Object Parent=get_srand:[srand(min(2,add(frequency(),1)),seed(),0)]
@@ -67,26 +71,25 @@
 @set Celestial Object Parent=get_num:[num(me)]
 
 @@ Takes the seed and turns it into a number from 1 to v(0), for indexing lists
+@@ THIS IS NEVER USED!
 @defattr Celestial Object Parent/seed_index=function inherit
 @set Celestial Object Parent=seed_index:[setq(1,max(v(0),1))][inc(mod(seed(),v(1)))]
 
 @@ Extract an item from the list in v(0), based on the seed
+@@ THIS IS NEVER USED!
 @defattr Celestial Object Parent/seed_extract=function inherit
 @set Celestial Object Parent=seed_extract:[extract(v(0),seed_index(wcount(v(0))),1)]
 
 @defattr Celestial Object Parent/get_seeded_index=function inherit
-@set Celestial Object Parent=get_seeded_index:[index_chance(srand(max(2,total_frequencies()),seed(),0))]
+@@set Celestial Object Parent=get_seeded_index:[index_chance(srand(max(2,total_frequencies()),seed(),0))]
+@set Celestial Object Parent=get_seeded_index:[index_chance(inc(srand(max(2,total_frequencies()),seed(),0)))]
 
-@defattr Celestial Object Parent/get_type_data=function inherit
-@defattr Celestial Object Parent/get_type_name=function inherit
-@defattr Celestial Object Parent/get_type_frequency=function inherit
-@defattr Celestial Object Parent/get_type_color=function inherit
+@defattr Celestial Object Parent/get_variant_data=function inherit
+@defattr Celestial Object Parent/get_variant_name=function inherit
+@defattr Celestial Object Parent/get_variant_frequency=function inherit
+@defattr Celestial Object Parent/get_variant_color=function inherit
 
-@@set Celestial Object Parent=get_type_data:[extract_type_data(seed_index(wcount(types(),record_delim())))]
-@@set Celestial Object Parent=get_type_name:[extract_type_name(seed_index(wcount(types(),record_delim())))]
-@@set Celestial Object Parent=get_type_frequency:[extract_type_frequency(seed_index(wcount(types(),record_delim())))]
-@@set Celestial Object Parent=get_type_color:[extract_type_color(seed_index(wcount(types(),record_delim())))]
-@set Celestial Object Parent=get_type_data:[extract_type_data(get_seeded_index())]
-@set Celestial Object Parent=get_type_name:[extract_type_name(get_seeded_index())]
-@set Celestial Object Parent=get_type_frequency:[extract_type_frequency(get_seeded_index())]
-@set Celestial Object Parent=get_type_color:[extract_type_color(get_seeded_index())]
+@set Celestial Object Parent=get_variant_data:[extract_variant_data(get_seeded_index())]
+@set Celestial Object Parent=get_variant_name:[extract_variant_name(get_seeded_index())]
+@set Celestial Object Parent=get_variant_frequency:[extract_variant_frequency(get_seeded_index())]
+@set Celestial Object Parent=get_variant_color:[extract_variant_color(get_seeded_index())]
