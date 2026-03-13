@@ -1,0 +1,66 @@
+@@ Enterable Celestial Object Parent
+@@  This parent provides the functionality for Enterable Celestial Object Parents like Planets and Asteroids
+
+@addparent2 Enterable Celestial Object Parent=Celestial Object Parent
+
+@sql CREATE TABLE IF NOT EXISTS enterable_celestial_objects (plane INT, source TEXT, destination TEXT)
+
+@set Enterable Celestial Object Parent=bearing haven
+
+@set Enterable Celestial Object Parent=alias:ecelobj
+@set Enterable Celestial Object Parent=idesc:You head down to the surface.
+
+@defattr Enterable Celestial Object Parent/roomid=function inherit
+@set Enterable Celestial Object Parent=roomid:[sql(s(SELECT destination FROM enterable_celestial_objects WHERE plane=[plane(v(#))] AND source="[num(me)]"))]
+
+@defattr Enterable Celestial Object Parent/landing_plane=function inherit
+
+@set Enterable Celestial Object Parent=landing_plane:0
+
+@defattr Enterable Celestial Object Parent/enterable_types=function inherit
+@set Enterable Celestial Object Parent=enterable_types:planet moon asteroidfield
+
+@defattr Enterable Celestial Object Parent/tr_configroom=inherit
+@defattr Enterable Celestial Object Parent/tr_dig=inherit
+@defattr Enterable Celestial Object Parent/tr_teldown=inherit
+
+@set Enterable Celestial Object Parent=tr_teldown:@tel %#=[roomid()]:[landing_plane()]
+
+@@ TODO: Add an @elock that checks for valid enterable celestial types, visibility, and override for success if the room already exists
+#mupdate on
+@set Enterable Celestial Object Parent=aenter:
+	@switch [isdbref(roomid())]=0,{
+		@switch [truth(wmatch(enterable_types(),celestial_type()))]=1,{
+			@tr me/tr_dig=[v(#)];
+		},{
+			@tr me/tr_log=[num(me)],[plane(v(#))],{[ansi(r+,ERROR: Unhandled celestial_type '[celestial_type()]')] triggered by [unparse(v(#))]};
+			@pemit %#=Unfortunately there was an error accessing that celestial body. Pleae contact an admin.;
+            @@ Player entered object, but there was a problem, so we need to put them back into space
+			@tel %#=[loc(me)]:[plane(v(#))];
+		};
+	},{
+		@tr me/tr_teldown=%#;
+	};
+.
+
+@set Enterable Celestial Object Parent=tr_dig:
+	@@ @tr_dig=#playerid
+	@@  This is a trigger to keep @iter and v(n) from being a mess;
+	@iter * created with room number *.= { @dig Room },{
+        @sql INSERT INTO enterable_celestial_objects VALUES ([plane(v(0))], "[num(me)]", "\[v(1)]");
+		@set \[v(1)]=floating;
+		@foreach \[zone(v(1))]=@delzone \[v(1)]=\\\[v(0)];
+		@set \[v(1)]=color:;
+		@iter Zone *(*Z) created.={ @zone [rest(num(me),#)]_[plane(v(0))] },{
+			@addzone \[v(1)]=\\\[v(1)];
+			@tr me/tr_configroom=\[v(1)],\\\[v(1)],%#;
+		};
+	}
+.
+
+@set Enterable Celestial Object Parent=tr_configroom:
+    @@ @tr_configroom=#roomid,#zoneid,#playerid
+    @@  Configure the 2D planar room;
+    @pemit %#=TODO: Configure room [unparse(v(0))] in zone [unparse(v(1))] for player [unparse(v(2))];
+.
+#mupdate off
